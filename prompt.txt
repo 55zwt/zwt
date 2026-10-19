@@ -1,0 +1,5 @@
+创建index.html首页和page2.html。
+所有css类名、id、js变量全部以yuan_开头。
+页面使用css长度单位，编写CSS3 3D动画。
+page2.html添加超链接跳转到首页index.html。
+每次执行提示词前，把【时间、模型、提示词】追加写入yuan_prompt.md，不覆盖原有内容。

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赵婉彤｜高级网页设计课堂实践</title>
+    <style>
+        :root {
+            --navy: #102a43;
+            --blue: #1f6f8b;
+            --orange: #ef8354;
+            --cream: #fffaf0;
+            --paper: #ffffff;
+            --muted: #607182;
+            --line: #dce5e7;
+            --mint: #c9e9df;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            color: var(--navy);
+            background-color: var(--navy);
+            background-image: radial-gradient(rgba(255,255,255,.13) 1px, transparent 1px);
+            background-size: 18px 18px;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            line-height: 1.6;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        h1, h2, p { margin: 0; }
+
+        .page {
+            width: min(1120px, calc(100% - 36px));
+            min-height: 100vh;
+            margin: 0 auto;
+            padding: 28px 0 46px;
+        }
+
+        header {
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 210px;
+            gap: 28px;
+            align-items: end;
+            overflow: hidden;
+            padding: 52px 52px 46px;
+            border-radius: 3px 3px 0 0;
+            background: var(--cream);
+        }
+
+        header::after {
+            content: "</>";
+            position: absolute;
+            right: 34px;
+            top: 22px;
+            color: rgba(31, 111, 139, .12);
+            font-family: Georgia, serif;
+            font-size: 90px;
+            font-weight: bold;
+        }
+
+        .eyebrow {
+            margin-bottom: 15px;
+            color: var(--orange);
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 4px;
+        }
+
+        h1 {
+            position: relative;
+            z-index: 1;
+            max-width: 760px;
+            font-family: Georgia, "Microsoft YaHei", serif;
+            font-size: clamp(34px, 5.5vw, 68px);
+            line-height: 1.08;
+            letter-spacing: 1px;
+        }
+
+        .intro {
+            max-width: 620px;
+            margin-top: 20px;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .student-mark {
+            position: relative;
+            z-index: 1;
+            padding: 17px 20px;
+            border: 2px solid var(--navy);
+            background: var(--mint);
+            box-shadow: 6px 6px 0 var(--orange);
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 1.9;
+            text-align: center;
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 300px;
+            gap: 26px;
+            padding: 32px 0 0;
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            color: var(--cream);
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        .section-label::after {
+            content: "";
+            height: 1px;
+            flex: 1;
+            background: rgba(255,255,255,.35);
+        }
+
+        .works {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .work {
+            display: flex;
+            min-height: 184px;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 22px;
+            border: 1px solid var(--line);
+            border-top: 5px solid var(--blue);
+            border-radius: 2px;
+            background: var(--paper);
+            transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+        }
+
+        .work:nth-child(2) { border-top-color: var(--orange); }
+        .work:nth-child(3) { border-top-color: #76a892; }
+        .work:nth-child(4) { border-top-color: #d6a84f; }
+        .work:nth-child(5) { border-top-color: var(--navy); }
+        .work:nth-child(6) { border-top-color: #c56b8a; }
+        .work:nth-child(7) { border-top-color: #5d8aa8; }
+        .work:nth-child(8) { border-top-color: #8b7bb5; }
+        .work:nth-child(9) { border-top-color: #b56b45; }
+        .work:nth-child(10) { border-top-color: #4f9b8c; }
+        .work:nth-child(11) { border-top-color: #ce8a3a; }
+
+        .work:hover {
+            transform: translateY(-5px);
+            background: var(--cream);
+            box-shadow: 7px 7px 0 var(--mint);
+        }
+
+        .number {
+            color: var(--orange);
+            font-family: Georgia, serif;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .work h2 {
+            margin: 17px 0 5px;
+            font-size: 21px;
+        }
+
+        .work p { color: var(--muted); font-size: 13px; }
+
+        .open {
+            align-self: flex-start;
+            margin-top: 15px;
+            color: var(--blue);
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        aside { display: flex; flex-direction: column; gap: 16px; }
+
+        .note, .prompt { padding: 25px; border-radius: 2px; }
+
+        .note {
+            color: var(--cream);
+            background: var(--orange);
+            box-shadow: 7px 7px 0 rgba(255,255,255,.14);
+        }
+
+        .note h2, .prompt h2 { margin-bottom: 12px; font-size: 19px; }
+        .note p { color: #fff4e8; font-size: 14px; }
+
+        .prompt {
+            border: 1px solid rgba(255,255,255,.45);
+            background: var(--blue);
+            color: #fff;
+        }
+
+        blockquote {
+            margin: 0;
+            color: #e5f4ef;
+            font-size: 14px;
+            line-height: 1.85;
+        }
+
+        footer {
+            padding: 22px 0 0;
+            color: rgba(255,255,255,.7);
+            font-size: 12px;
+            text-align: right;
+        }
+
+        @media (max-width: 720px) {
+            .page { width: min(100% - 24px, 540px); padding-top: 12px; }
+            header, main { grid-template-columns: 1fr; }
+            header { gap: 24px; padding: 34px 25px 32px; }
+            header::after { right: 15px; top: 18px; font-size: 65px; }
+            .student-mark { justify-self: start; }
+            .works { grid-template-columns: 1fr; }
+            footer { text-align: left; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header>
+            <div>
+                <p class="eyebrow">WEB DESIGN / CLASS PRACTICE</p>
+                <h1>赵婉彤的《高级网页设计》课堂实践</h1>
+                <p class="intro">从 HTML 结构到 CSS 样式，把每一次课堂练习整理成一条可以回看的学习路径。</p>
+            </div>
+            <div class="student-mark">学号 524<br>计算机24005</div>
+        </header>
+
+        <main>
+            <section>
+                <div class="section-label">实践页面 / WORKS</div>
+                <div class="works">
+                    <a class="work" href="2-1.html">
+                        <div>
+                            <span class="number">01</span>
+                            <h2>HTML 元素</h2>
+                            <p>标签、文本、列表与页面基础结构</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="2-2.html">
+                        <div>
+                            <span class="number">02</span>
+                            <h2>超链接与表格</h2>
+                            <p>链接、图片、表格和页面内容组织</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="3-1.html">
+                        <div>
+                            <span class="number">03</span>
+                            <h2>HTML 表单</h2>
+                            <p>输入控件、选择项与表单交互结构</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="3-2css.html">
+                        <div>
+                            <span class="number">04</span>
+                            <h2>CSS 基础</h2>
+                            <p>选择器、颜色、尺寸与盒模型练习</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="4-1%20css2.html">
+                        <div>
+                            <span class="number">05</span>
+                            <h2>CSS 进阶</h2>
+                            <p>群组选择器、后代选择器与层叠继承</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="5-1层叠与继承.html">
+                        <div>
+                            <span class="number">06</span>
+                            <h2>层叠与继承</h2>
+                            <p>CSS 规则优先级与样式继承练习</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="5-2盒模型.html">
+                        <div>
+                            <span class="number">07</span>
+                            <h2>盒模型</h2>
+                            <p>边框、内边距、外边距与元素尺寸</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="6-1flex.html">
+                        <div>
+                            <span class="number">08</span>
+                            <h2>Flex 布局</h2>
+                            <p>弹性容器、主轴与项目排列方式</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="6-2.html">
+                        <div>
+                            <span class="number">09</span>
+                            <h2>Flex 实践</h2>
+                            <p>使用弹性布局完成页面内容组织</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="7-1上图下文.html">
+                        <div>
+                            <span class="number">10</span>
+                            <h2>上图下文</h2>
+                            <p>图片与文字组合的卡片布局练习</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="7-2左图右文.html">
+                        <div>
+                            <span class="number">11</span>
+                            <h2>左图右文</h2>
+                            <p>使用 Flex 实现图文横向排列</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="8-1css3选择器.html">
+                        <div>
+                            <span class="number">12</span>
+                            <h2>CSS3 选择器</h2>
+                            <p>练习 CSS3 选择器与元素匹配规则</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="9-1transition.html">
+                        <div>
+                            <span class="number">13</span>
+                            <h2>Transition 过渡</h2>
+                            <p>使用过渡效果与悬停交互呈现页面内容</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="10-1-animation.html">
+                        <div>
+                            <span class="number">14</span>
+                            <h2>CSS 背景色动画</h2>
+                            <p>通过关键帧实现背景颜色循环变化</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="10-2.html">
+                        <div>
+                            <span class="number">15</span>
+                            <h2>图片位移轮播</h2>
+                            <p>图片横向切换与文字样式练习</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="10-3.html">
+                        <div>
+                            <span class="number">16</span>
+                            <h2>Viewport 媒体查询</h2>
+                            <p>全屏背景切换与 rem 响应式字号</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                    <a class="work" href="10-4.html">
+                        <div>
+                            <span class="number">17</span>
+                            <h2>响应式网格布局</h2>
+                            <p>媒体查询控制八个盒子的每行数量</p>
+                        </div>
+                        <span class="open">打开页面 →</span>
+                    </a>
+                </div>
+            </section>
+
+            <aside>
+                <section class="note">
+                    <h2>课程记录</h2>
+                    <p>这是一份课堂实践导航。每个练习页面都保留了原始代码和学习痕迹，点击卡片即可进入对应内容。</p>
+                </section>
+                <section class="prompt">
+                    <h2>本次提示词</h2>
+                    <blockquote>“创建一个新页面，包括本目录下的所有网页的超链接，使用原生代码，不使用cdn，新页面名称为index.html，主题为赵婉彤的《高级网页设计》课堂实践，美化页面，页面中包括本提示词。”</blockquote>
+                </section>
+            </aside>
+        </main>
+
+        <footer>赵婉彤 · 高级网页设计 · 课堂实践作品集</footer>
+    </div>
+</body>
+</html>

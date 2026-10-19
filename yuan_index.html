@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 · CSS3 3D 动画</title>
+    <style>
+        :root {
+            --yuan_bg: #0d1b2a;
+            --yuan_panel: #1b2a41;
+            --yuan_line: rgba(255, 255, 255, .35);
+            --yuan_txt: #f0f4f8;
+            --yuan_sub: #a9bccd;
+            --yuan_accent: #ff9f1c;
+            --yuan_accent2: #2ec4b6;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 4vh 4vw 6vh;
+            color: var(--yuan_txt);
+            background-color: var(--yuan_bg);
+            background-image:
+                linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            line-height: 1.7;
+        }
+
+        h1, h2, p { margin: 0; }
+        a { color: var(--yuan_accent2); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .yuan_page {
+            width: min(1080px, 100%);
+            margin: 0 auto;
+        }
+
+        .yuan_head {
+            padding: 3em 2em;
+            border: 1px solid var(--yuan_line);
+            border-left: 0.5em solid var(--yuan_accent);
+            background: rgba(27, 42, 65, .8);
+            backdrop-filter: blur(2px);
+        }
+
+        .yuan_head h1 {
+            font-size: clamp(1.6rem, 4vw, 2.8rem);
+            letter-spacing: .08em;
+        }
+
+        .yuan_head p {
+            max-width: 46em;
+            margin-top: 0.8em;
+            color: var(--yuan_sub);
+            font-size: 1rem;
+        }
+
+        .yuan_grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .yuan_box {
+            padding: 1.5rem;
+            border: 1px solid var(--yuan_line);
+            background: rgba(13, 27, 42, .75);
+        }
+
+        .yuan_box h2 {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            letter-spacing: .12em;
+            color: var(--yuan_accent);
+        }
+
+        .yuan_tip {
+            margin-top: 1rem;
+            color: var(--yuan_sub);
+            font-size: 0.85rem;
+        }
+
+        /* ---------- 3D 场景：旋转立方体 ---------- */
+        .yuan_scene {
+            width: 14rem;
+            height: 14rem;
+            margin: 1rem auto;
+            perspective: 45rem;
+        }
+
+        .yuan_cube {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: yuan_rotate 14s linear infinite;
+        }
+
+        .yuan_face {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            width: 14rem;
+            height: 14rem;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--yuan_accent);
+            background: rgba(46, 196, 182, .22);
+            font-size: 2em;
+            font-weight: bold;
+            letter-spacing: .1em;
+            backface-visibility: visible;
+        }
+
+        .yuan_face_front  { transform: translateZ(7rem); }
+        .yuan_face_back   { transform: rotateY(180deg) translateZ(7rem); }
+        .yuan_face_right  { transform: rotateY(90deg) translateZ(7rem); }
+        .yuan_face_left   { transform: rotateY(-90deg) translateZ(7rem); }
+        .yuan_face_top    { transform: rotateX(90deg) translateZ(7rem); }
+        .yuan_face_bottom { transform: rotateX(-90deg) translateZ(7rem); }
+
+        @keyframes yuan_rotate {
+            from { transform: rotateX(0deg) rotateY(0deg); }
+            to   { transform: rotateX(360deg) rotateY(720deg); }
+        }
+
+        /* ---------- 3D 场景：鼠标跟随翻转卡片 ---------- */
+        .yuan_tilt_wrap {
+            display: flex;
+            min-height: 15rem;
+            align-items: center;
+            justify-content: center;
+            perspective: 30rem;
+        }
+
+        .yuan_tilt_card {
+            width: 15rem;
+            min-height: 12rem;
+            padding: 1.2rem;
+            border: 2px solid var(--yuan_accent2);
+            border-radius: 0.6em;
+            background: linear-gradient(135deg, #1b2a41, #12324a);
+            transform: rotateX(0deg) rotateY(0deg);
+            transform-style: preserve-3d;
+            transition: transform .25s ease;
+            text-align: center;
+        }
+
+        .yuan_tilt_card h3 {
+            margin: 0 0 0.6em;
+            font-size: 1.2em;
+            letter-spacing: .1em;
+        }
+
+        .yuan_tilt_card p {
+            color: var(--yuan_sub);
+            font-size: 0.9em;
+        }
+
+        .yuan_tilt_badge {
+            display: inline-block;
+            margin-top: 1em;
+            padding: 0.3em 1em;
+            border: 1px dashed var(--yuan_accent);
+            color: var(--yuan_accent);
+            font-size: 0.8em;
+            transform: translateZ(30px);
+        }
+
+        /* ---------- 长度单位展示 ---------- */
+        .yuan_unit_list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .yuan_unit_list li {
+            min-width: 5.5em;
+            padding: 0.5em 0.8em;
+            border: 1px solid var(--yuan_line);
+            background: rgba(255, 255, 255, .06);
+            font-family: Consolas, monospace;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        .yuan_bar_demo {
+            height: 1.2em;
+            margin-top: 1rem;
+            border: 1px solid var(--yuan_line);
+            background: rgba(255,255,255,.08);
+        }
+
+        .yuan_bar_demo span {
+            display: block;
+            width: 62%;
+            height: 100%;
+            background: var(--yuan_accent2);
+        }
+
+        /* ---------- 导航 ---------- */
+        .yuan_nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding: 1.2rem 1.5rem;
+            border: 1px solid var(--yuan_accent);
+            background: rgba(255, 159, 28, .12);
+        }
+
+        .yuan_btn {
+            display: inline-block;
+            padding: 0.6em 1.6em;
+            border: 2px solid var(--yuan_accent);
+            background: var(--yuan_accent);
+            color: #0d1b2a;
+            font-size: 1em;
+            font-weight: bold;
+            letter-spacing: .1em;
+            cursor: pointer;
+            transition: transform .2s ease, background .2s ease;
+        }
+
+        .yuan_btn:hover { transform: translateY(-3px); background: #ffb54d; text-decoration: none; }
+
+        .yuan_btn_ghost {
+            border-color: var(--yuan_accent2);
+            background: transparent;
+            color: var(--yuan_accent2);
+        }
+
+        .yuan_btn_ghost:hover { background: rgba(46, 196, 182, .2); }
+
+        .yuan_status {
+            align-self: center;
+            margin-left: auto;
+            color: var(--yuan_sub);
+            font-size: 0.85em;
+        }
+
+        footer {
+            margin-top: 2rem;
+            color: var(--yuan_sub);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 2vh 3vw 4vh; }
+            .yuan_head { padding: 1.5rem 1rem; }
+            .yuan_scene { width: 11rem; height: 11rem; perspective: 34rem; }
+            .yuan_face { width: 11rem; height: 11rem; }
+            .yuan_face_front  { transform: translateZ(5.5rem); }
+            .yuan_face_back   { transform: rotateY(180deg) translateZ(5.5rem); }
+            .yuan_face_right  { transform: rotateY(90deg) translateZ(5.5rem); }
+            .yuan_face_left   { transform: rotateY(-90deg) translateZ(5.5rem); }
+            .yuan_face_top    { transform: rotateX(90deg) translateZ(5.5rem); }
+            .yuan_face_bottom { transform: rotateX(-90deg) translateZ(5.5rem); }
+            .yuan_status { margin-left: 0; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="yuan_page">
+        <header class="yuan_head">
+            <h1>首页 · CSS3 3D 动画</h1>
+            <p>本页面使用 px、rem、em、vw、vh、% 等 CSS 长度单位完成布局，主体为 preserve-3d 立方体旋转与鼠标跟随翻转卡片。所有类名、id 与脚本变量均以 yuan_ 开头。</p>
+        </header>
+
+        <div class="yuan_grid">
+            <section class="yuan_box">
+                <h2>3D 立方体</h2>
+                <div class="yuan_scene" id="yuan_scene">
+                    <div class="yuan_cube" id="yuan_cube">
+                        <div class="yuan_face yuan_face_front">前</div>
+                        <div class="yuan_face yuan_face_back">后</div>
+                        <div class="yuan_face yuan_face_right">右</div>
+                        <div class="yuan_face yuan_face_left">左</div>
+                        <div class="yuan_face yuan_face_top">上</div>
+                        <div class="yuan_face yuan_face_bottom">下</div>
+                    </div>
+                </div>
+                <p class="yuan_tip">perspective: 45rem；六个面分别用 translateZ(7rem) 撑开。</p>
+            </section>
+
+            <section class="yuan_box">
+                <h2>鼠标跟随卡片</h2>
+                <div class="yuan_tilt_wrap" id="yuan_tilt_wrap">
+                    <div class="yuan_tilt_card" id="yuan_tilt_card">
+                        <h3>赵婉彤</h3>
+                        <p>移动鼠标到这个区域，卡片会做 3D 倾斜，徽章用 translateZ 浮在卡片上方。</p>
+                        <span class="yuan_tilt_badge">translateZ(30px)</span>
+                    </div>
+                </div>
+                <p class="yuan_tip">JS 变量：yuan_rx、yuan_ry 控制 rotateX / rotateY。</p>
+            </section>
+
+            <section class="yuan_box">
+                <h2>CSS 长度单位</h2>
+                <ul class="yuan_unit_list">
+                    <li>16px</li>
+                    <li>1.5rem</li>
+                    <li>2em</li>
+                    <li>50%</li>
+                    <li>30vw</li>
+                    <li>60vh</li>
+                    <li>0.8em</li>
+                    <li>14rem</li>
+                </ul>
+                <div class="yuan_bar_demo"><span></span></div>
+                <p class="yuan_tip">进度条宽度使用百分比 62%，容器高度 1.2em。</p>
+            </section>
+        </div>
+
+        <nav class="yuan_nav">
+            <a class="yuan_btn" href="page2.html">进入 page2 页面 →</a>
+            <a class="yuan_btn yuan_btn_ghost" href="index.html">课程作品集首页</a>
+            <span class="yuan_status" id="yuan_status">3D 动画运行中</span>
+        </nav>
+
+        <footer>赵婉彤 · 高级网页设计 · CSS3 3D 动画练习</footer>
+    </div>
+
+    <script>
+        var yuan_tiltWrap = document.getElementById('yuan_tilt_wrap');
+        var yuan_tiltCard = document.getElementById('yuan_tilt_card');
+        var yuan_statusBox = document.getElementById('yuan_status');
+        var yuan_cube = document.getElementById('yuan_cube');
+        var yuan_degX = 0;
+        var yuan_degY = 0;
+
+        yuan_tiltWrap.addEventListener('mousemove', function (yuan_event) {
+            var yuan_rect = yuan_tiltWrap.getBoundingClientRect();
+            var yuan_px = (yuan_event.clientX - yuan_rect.left) / yuan_rect.width;
+            var yuan_py = (yuan_event.clientY - yuan_rect.top) / yuan_rect.height;
+            yuan_degY = (yuan_px - 0.5) * 40;
+            yuan_degX = (0.5 - yuan_py) * 40;
+            yuan_tiltCard.style.transform = 'rotateX(' + yuan_degX.toFixed(1) + 'deg) rotateY(' + yuan_degY.toFixed(1) + 'deg)';
+        });
+
+        yuan_tiltWrap.addEventListener('mouseleave', function () {
+            yuan_tiltCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
+
+        var yuan_paused = false;
+
+        document.addEventListener('keydown', function (yuan_key) {
+            if (yuan_key.code === 'Space') {
+                yuan_paused = !yuan_paused;
+                yuan_cube.style.animationPlayState = yuan_paused ? 'paused' : 'running';
+                yuan_statusBox.textContent = yuan_paused ? '3D 动画已暂停' : '3D 动画运行中';
+                yuan_key.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

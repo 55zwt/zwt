@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>page2 · CSS3 3D 翻转</title>
+    <style>
+        :root {
+            --yuan_bg: #10182b;
+            --yuan_panel: #1a2540;
+            --yuan_txt: #eef3ff;
+            --yuan_sub: #9fb1cf;
+            --yuan_accent: #ff5d8f;
+            --yuan_accent2: #ffd166;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 5vh 5vw;
+            color: var(--yuan_txt);
+            background: radial-gradient(circle at 30% 20%, #1f2d52 0%, var(--yuan_bg) 60%);
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            line-height: 1.7;
+        }
+
+        h1, h2, p { margin: 0; }
+
+        .yuan_page {
+            width: min(1000px, 100%);
+            margin: 0 auto;
+        }
+
+        .yuan_title {
+            padding: 2em 1.5em;
+            border-bottom: 3px solid var(--yuan_accent);
+            background: rgba(26, 37, 64, .85);
+            text-align: center;
+        }
+
+        .yuan_title h1 {
+            font-size: clamp(1.5rem, 5vw, 2.6rem);
+            letter-spacing: .15em;
+        }
+
+        .yuan_title p {
+            margin-top: 0.6em;
+            color: var(--yuan_sub);
+            font-size: 1rem;
+        }
+
+        .yuan_row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2.5rem;
+            perspective: 60vh;
+        }
+
+        /* ---------- 3D 翻转卡片 ---------- */
+        .yuan_flip {
+            width: 16rem;
+            min-height: 13rem;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform .8s cubic-bezier(.2, .7, .3, 1);
+        }
+
+        .yuan_flip.yuan_flipped,
+        .yuan_flip:hover {
+            transform: rotateY(180deg);
+        }
+
+        .yuan_side {
+            display: flex;
+            min-height: 13rem;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.2rem;
+            border: 2px solid var(--yuan_accent2);
+            background: var(--yuan_panel);
+            backface-visibility: hidden;
+            text-align: center;
+        }
+
+        .yuan_side_back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-color: var(--yuan_accent);
+            background: linear-gradient(135deg, #3a1f4d, #1a2540);
+            transform: rotateY(180deg);
+        }
+
+        .yuan_side h2 {
+            font-size: 1.3em;
+            letter-spacing: .1em;
+        }
+
+        .yuan_side p {
+            margin-top: 0.6em;
+            color: var(--yuan_sub);
+            font-size: 0.9em;
+        }
+
+        .yuan_tag {
+            display: inline-block;
+            margin-top: 1em;
+            padding: 0.25em 1em;
+            border: 1px dashed var(--yuan_accent2);
+            color: var(--yuan_accent2);
+            font-size: 0.75em;
+            transform: translateZ(40px);
+        }
+
+        /* ---------- 3D 旋转相框 ---------- */
+        .yuan_stage {
+            width: 100%;
+            margin-top: 2.5rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, .3);
+            background: rgba(16, 24, 43, .7);
+            perspective: 80vw;
+            overflow: hidden;
+        }
+
+        .yuan_stage h2 {
+            margin-bottom: 1rem;
+            color: var(--yuan_accent2);
+            font-size: 1.05rem;
+            letter-spacing: .12em;
+            text-align: center;
+        }
+
+        .yuan_track {
+            display: flex;
+            width: max-content;
+            gap: 1.2rem;
+            animation: yuan_slide 18s linear infinite;
+        }
+
+        .yuan_panel {
+            width: 18rem;
+            height: 10rem;
+            padding: 1rem;
+            border: 2px solid var(--yuan_accent);
+            background: rgba(255, 93, 143, .15);
+            transform: rotateY(0deg);
+            transform-style: preserve-3d;
+            animation: yuan_swing 4s ease-in-out infinite alternate;
+        }
+
+        .yuan_panel:nth-child(2) { animation-delay: 1s; border-color: var(--yuan_accent2); background: rgba(255, 209, 102, .14); }
+        .yuan_panel:nth-child(3) { animation-delay: 2s; border-color: #4cc9f0; background: rgba(76, 201, 240, .14); }
+        .yuan_panel:nth-child(4) { animation-delay: 3s; border-color: #80ed99; background: rgba(128, 237, 153, .14); }
+
+        .yuan_panel strong {
+            display: block;
+            font-size: 1.1em;
+            letter-spacing: .1em;
+        }
+
+        .yuan_panel span {
+            display: block;
+            margin-top: 0.5em;
+            color: var(--yuan_sub);
+            font-size: 0.85em;
+        }
+
+        @keyframes yuan_slide {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+
+        @keyframes yuan_swing {
+            from { transform: rotateY(-35deg) translateZ(0); }
+            to   { transform: rotateY(35deg) translateZ(3rem); }
+        }
+
+        /* ---------- 返回首页 ---------- */
+        .yuan_back {
+            display: block;
+            width: fit-content;
+            margin: 2.5rem auto 0;
+            padding: 0.7em 2.2em;
+            border: 3px solid var(--yuan_accent2);
+            background: var(--yuan_accent2);
+            color: #10182b;
+            font-size: 1.05em;
+            font-weight: bold;
+            letter-spacing: .15em;
+            cursor: pointer;
+            box-shadow: 6px 6px 0 rgba(255, 93, 143, .6);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .yuan_back:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 10px 10px 0 rgba(255, 93, 143, .6);
+            text-decoration: none;
+        }
+
+        .yuan_back:active { transform: translate(0, 0); box-shadow: 3px 3px 0 rgba(255, 93, 143, .6); }
+
+        .yuan_links {
+            margin-top: 1.2rem;
+            color: var(--yuan_sub);
+            font-size: 0.85em;
+            text-align: center;
+        }
+
+        .yuan_links a { color: var(--yuan_accent2); }
+
+        footer {
+            margin-top: 2rem;
+            color: var(--yuan_sub);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 3vh 4vw; }
+            .yuan_flip, .yuan_side { width: 100%; }
+            .yuan_row { perspective: 40vh; }
+            .yuan_panel { width: 13rem; height: 9rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="yuan_page">
+        <header class="yuan_title">
+            <h1>page2 · CSS3 3D 翻转页面</h1>
+            <p>点击卡片触发 rotateY 翻转，下方为 translateX + rotateY 组合的循环动画。</p>
+        </header>
+
+        <div class="yuan_row" id="yuan_row">
+            <div class="yuan_flip" id="yuan_flip1">
+                <div class="yuan_side">
+                    <h2>正面</h2>
+                    <p>点击卡片查看背面，使用 backface-visibility: hidden 遮挡。</p>
+                    <span class="yuan_tag">preserve-3d</span>
+                </div>
+                <div class="yuan_side yuan_side_back">
+                    <h2>反面</h2>
+                    <p>背面通过 rotateY(180deg) 与 translateZ 体现 3D 层次。</p>
+                    <span class="yuan_tag">rotateY(180deg)</span>
+                </div>
+            </div>
+
+            <div class="yuan_flip" id="yuan_flip2">
+                <div class="yuan_side">
+                    <h2>长度单位</h2>
+                    <p>卡片宽度 16rem，最小高度 13rem，内边距 1.2rem。</p>
+                    <span class="yuan_tag">rem / em / vh / vw</span>
+                </div>
+                <div class="yuan_side yuan_side_back">
+                    <h2>透视</h2>
+                    <p>容器 perspective 取 60vh / 80vw，用视口单位随屏幕缩放。</p>
+                    <span class="yuan_tag">perspective</span>
+                </div>
+            </div>
+        </div>
+
+        <section class="yuan_stage">
+            <h2>3D 卡片循环动画</h2>
+            <div class="yuan_track" id="yuan_track">
+                <div class="yuan_panel">
+                    <strong>旋转</strong>
+                    <span>rotateY 让卡片左右摆动</span>
+                </div>
+                <div class="yuan_panel">
+                    <strong>位移</strong>
+                    <span>translateZ 把卡片推离背景</span>
+                </div>
+                <div class="yuan_panel">
+                    <strong>轮播</strong>
+                    <span>translateX 横向循环滚动</span>
+                </div>
+                <div class="yuan_panel">
+                    <strong>衔接</strong>
+                    <span>两组 keyframes 同时执行</span>
+                </div>
+                <div class="yuan_panel">
+                    <strong>旋转</strong>
+                    <span>rotateY 让卡片左右摆动</span>
+                </div>
+                <div class="yuan_panel">
+                    <strong>位移</strong>
+                    <span>translateZ 把卡片推离背景</span>
+                </div>
+                <div class="yuan_panel">
+                    <strong>轮播</strong>
+                    <span>translateX 横向循环滚动</span>
+                </div>
+                <div class="yuan_panel">
+                    <strong>衔接</strong>
+                    <span>两组 keyframes 同时执行</span>
+                </div>
+            </div>
+        </section>
+
+        <a class="yuan_back" href="yuan_index.html" id="yuan_back">← 返回首页 index</a>
+        <p class="yuan_links">其他入口：<a href="index.html">课程作品集首页</a></p>
+
+        <footer>赵婉彤 · 高级网页设计 · page2 练习页</footer>
+    </div>
+
+    <script>
+        var yuan_flip1 = document.getElementById('yuan_flip1');
+        var yuan_flip2 = document.getElementById('yuan_flip2');
+        var yuan_clickCount = 0;
+
+        function yuan_toggle(yuan_el) {
+            yuan_clickCount = yuan_clickCount + 1;
+            yuan_el.classList.toggle('yuan_flipped');
+        }
+
+        yuan_flip1.addEventListener('click', function () { yuan_toggle(yuan_flip1); });
+        yuan_flip2.addEventListener('click', function () { yuan_toggle(yuan_flip2); });
+    </script>
+</body>
+</html>

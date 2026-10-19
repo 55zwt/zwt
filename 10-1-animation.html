@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>背景色动画</title>
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			display: grid;
+			min-height: 100vh;
+			margin: 0;
+			place-items: center;
+			background: #f4f5f0;
+			font-family: "Microsoft YaHei", sans-serif;
+		}
+
+		.scene {
+			display: grid;
+			justify-items: center;
+			gap: 28px;
+		}
+
+		.name {
+			margin: 0;
+			color: #17324d;
+			font-family: Georgia, serif;
+			font-size: 42px;
+			font-weight: 700;
+			animation: name-enter 900ms cubic-bezier(.2, .8, .2, 1) both;
+		}
+
+		.color-box {
+			position: relative;
+			overflow: hidden;
+			width: min(260px, 70vw);
+			aspect-ratio: 1;
+			border: 1px solid rgb(255 255 255 / 55%);
+			border-radius: 30px;
+			background-color: #ff6b6b;
+			box-shadow: 0 24px 50px rgb(23 50 77 / 18%);
+			animation: color-cycle 8s ease-in-out infinite,
+				box-float 4s ease-in-out infinite;
+		}
+
+		.color-box::after {
+			position: absolute;
+			top: -30%;
+			left: -70%;
+			width: 55%;
+			height: 160%;
+			background: linear-gradient(90deg, transparent, rgb(255 255 255 / 38%), transparent);
+			content: "";
+			transform: rotate(24deg);
+			animation: shine 5s ease-in-out infinite;
+		}
+
+		@keyframes name-enter {
+			from {
+				opacity: 0;
+				transform: translateY(16px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes color-cycle {
+			0%, 100% {
+				background-color: #ff6b6b;
+			}
+			25% {
+				background-color: #ffd166;
+			}
+			50% {
+				background-color: #06d6a0;
+			}
+			75% {
+				background-color: #118ab2;
+			}
+		}
+
+		@keyframes box-float {
+			0%, 100% {
+				transform: translateY(0) rotate(-2deg);
+			}
+			50% {
+				transform: translateY(-14px) rotate(2deg);
+			}
+		}
+
+		@keyframes shine {
+			0%, 20% {
+				left: -70%;
+			}
+			60%, 100% {
+				left: 130%;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			*,
+			*::before,
+			*::after {
+				animation-duration: 0.01ms !important;
+				animation-iteration-count: 1 !important;
+				scroll-behavior: auto !important;
+			}
+		}
+	</style>
+</head>
+<body>
+	<main class="scene">
+		<h1 class="name">524zwt</h1>
+		<div class="color-box" role="img" aria-label="背景颜色循环变化并带有浮动高光效果的盒子"></div>
+	</main>
+</body>
+</html>

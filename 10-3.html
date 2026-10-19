@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>视口与媒体查询</title>
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+
+		html {
+			font-size: 18px;
+		}
+
+		body {
+			margin: 0;
+			font-family: SimHei, 'Microsoft YaHei', sans-serif;
+		}
+
+		.viewport-box {
+			display: grid;
+			width: 100%;
+			min-height: 100vh;
+			min-height: 100dvh;
+			place-items: center;
+			padding: 2rem;
+			background-color: #245b48;
+			background-image:
+				linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+				linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+			background-size: 2rem 2rem;
+			color: #fff;
+			transition: background-color 400ms ease;
+		}
+
+		.viewport-text {
+			margin: 0;
+			font-size: 4rem;
+			font-weight: 700;
+			line-height: 1.1;
+			text-align: center;
+			text-shadow: 0 0.15rem 1rem rgba(0, 0, 0, 0.24);
+		}
+
+		@media (max-width: 1024px) {
+			html {
+				font-size: 16px;
+			}
+
+			.viewport-box {
+				background-color: #c65f45;
+			}
+		}
+
+		@media (max-width: 600px) {
+			html {
+				font-size: 13px;
+			}
+
+			.viewport-box {
+				background-color: #35689a;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.viewport-box {
+				transition: none;
+			}
+		}
+	</style>
+</head>
+<body>
+	<main class="viewport-box">
+		<h1 class="viewport-text">524zwt</h1>
+	</main>
+</body>
+</html>
