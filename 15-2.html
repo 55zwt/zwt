@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<!--
+    功能名称：JavaScript 程序结构（循环与条件）
+    作者：赵婉彤
+    建立时间：2026-10-26
+    使用大模型：GLM-5.3-Flash
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>15-2 · JavaScript 程序结构：循环与条件</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #10151f;
+            --line: #303d52;
+            --text: #edf3fc;
+            --muted: #96a5bb;
+            --accent: #69d2c3;
+            --orange: #ffb86b;
+            --purple: #c39bff;
+        }
+        * { box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 28px 20px 48px;
+            color: var(--text);
+            background: radial-gradient(ellipse at 90% 0%, rgba(105, 210, 195, .14), transparent 38%), var(--bg);
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+        }
+        .page { width: min(1080px, 100%); margin: 0 auto; }
+        .eyebrow { margin: 0 0 10px; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: .16em; }
+        h1 { margin: 0; font-size: clamp(26px, 6vw, 42px); }
+        .intro { max-width: 640px; margin: 12px 0 28px; color: var(--muted); line-height: 1.8; }
+        .demo {
+            padding: clamp(20px, 5vw, 34px);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: linear-gradient(145deg, rgba(34, 47, 66, .95), rgba(25, 34, 49, .92));
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .22);
+        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+        .card {
+            display: flex;
+            flex-direction: column;
+            padding: 18px;
+            border: 1px solid rgba(150, 165, 187, .2);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, .035);
+        }
+        .card.wide { grid-column: 1 / -1; }
+        .card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .card h2 { margin: 0; font-size: 16px; }
+        .tag { margin-left: auto; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+        .tag.loop   { background: rgba(105, 210, 195, .14); color: var(--accent); }
+        .tag.cond   { background: rgba(255, 184, 107, .14); color: var(--orange); }
+        .tag.mix    { background: rgba(195, 155, 255, .14); color: var(--purple); }
+        .code-box {
+            margin: 0 0 12px;
+            padding: 12px 14px;
+            border: 1px solid rgba(150, 165, 187, .16);
+            border-radius: 10px;
+            background: rgba(9, 13, 20, .8);
+            color: #cfe0f2;
+            font: 12px/1.7 "Consolas", monospace;
+            white-space: pre-wrap;
+        }
+        .out {
+            margin-top: auto;
+            padding: 10px 14px;
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            background: rgba(105, 210, 195, .08);
+        }
+        .out .line { color: #d7e5f5; font: 13px/1.9 "Consolas", monospace; }
+        .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+        .chips span {
+            min-width: 52px;
+            padding: 6px 10px;
+            border: 1px solid rgba(150, 165, 187, .22);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .05);
+            color: #d7e5f5;
+            font: 12px/1 "Consolas", monospace;
+            text-align: center;
+        }
+        .chips .f  { border-color: rgba(105, 210, 195, .55); color: var(--accent); }
+        .chips .b  { border-color: rgba(255, 184, 107, .55); color: var(--orange); }
+        .chips .fb { border-color: rgba(195, 155, 255, .6);  color: var(--purple); }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <p class="eyebrow">15-2 / JS STRUCTURE</p>
+        <h1>JavaScript 程序结构：循环与条件</h1>
+        <p class="intro">每张卡片上方是程序代码，下方是浏览器真实运行后的输出。循环结构让代码重复执行，条件结构让程序学会“做选择”。</p>
+        <section class="demo" aria-label="循环与条件演示">
+            <div class="grid" id="grid"></div>
+        </section>
+    </main>
+    <script>
+        // 演示数据：run() 真实执行代码逻辑，返回输出行或彩色块
+        var demos = [
+            {
+                tag: '循环', name: 'for · 累加求和',
+                code: 'var sum = 0;\nfor (var i = 1; i <= 100; i++) {\n    sum = sum + i;   // 累加\n}\n// 循环结束后 sum 为 5050',
+                run: function () {
+                    var sum = 0;
+                    for (var i = 1; i <= 100; i++) { sum += i; }
+                    return { lines: ['1 + 2 + 3 + … + 100 = ' + sum] };
+                }
+            },
+            {
+                tag: '循环', name: 'while · 细胞翻倍',
+                code: 'var count = 1;      // 初始 1 个\nvar hour = 0;\nwhile (count <= 1000) {\n    count = count * 2;   // 每小时翻倍\n    hour++;\n}',
+                run: function () {
+                    var count = 1, hour = 0, lines = [];
+                    while (count <= 1000) { count *= 2; hour++; lines.push('第 ' + hour + ' 小时：' + count + ' 个'); }
+                    return { lines: lines };
+                }
+            },
+            {
+                tag: '循环', name: 'do...while · 至少执行一次',
+                code: 'var i = 10;\ndo {\n    console.log(\'执行一次\');  // 条件为假也会先执行\n    i++;\n} while (i < 5);',
+                run: function () {
+                    var times = 0, i = 10;
+                    do { times++; i++; } while (i < 5);
+                    return { lines: ['条件 10 < 5 为假，循环体仍执行了 ' + times + ' 次'] };
+                }
+            },
+            {
+                tag: '循环', name: 'for...of · 遍历数组',
+                code: "var fruits = ['苹果', '香蕉', '橘子'];\nfor (var f of fruits) {\n    console.log(f);\n}",
+                run: function () {
+                    var fruits = ['苹果', '香蕉', '橘子'], lines = [];
+                    for (var f of fruits) { lines.push(f); }
+                    return { lines: lines };
+                }
+            },
+            {
+                tag: '条件', name: 'if...else if...else · 成绩等级',
+                code: "function grade(score) {\n    if (score >= 90)      return '优秀';\n    else if (score >= 80) return '良好';\n    else if (score >= 60) return '及格';\n    else                  return '不及格';\n}",
+                run: function () {
+                    function grade(score) {
+                        if (score >= 90) return '优秀';
+                        else if (score >= 80) return '良好';
+                        else if (score >= 60) return '及格';
+                        else return '不及格';
+                    }
+                    return { lines: ['92 → ' + grade(92), '85 → ' + grade(85), '73 → ' + grade(73), '58 → ' + grade(58)] };
+                }
+            },
+            {
+                tag: '条件', name: 'switch · 星期几',
+                code: "switch (day) {\n    case 6: text = '星期六'; break;\n    case 0: text = '星期日'; break;\n    default: text = '工作日';\n}",
+                run: function () {
+                    function weekName(d) {
+                        switch (d) {
+                            case 6: return '星期六';
+                            case 0: return '星期日';
+                            default: return '工作日';
+                        }
+                    }
+                    return { lines: ['6 → ' + weekName(6), '0 → ' + weekName(0), '3 → ' + weekName(3)] };
+                }
+            },
+            {
+                tag: '条件', name: '三元运算符 · 奇偶判断',
+                code: "var n = 17;\nvar result = (n % 2 === 0) ? '偶数' : '奇数';",
+                run: function () {
+                    var n = 17;
+                    return { lines: ['17 % 2 = ' + (17 % 2) + ' → ' + ((n % 2 === 0) ? '偶数' : '奇数')] };
+                }
+            },
+            {
+                tag: '综合', name: '循环 + 条件 · FizzBuzz（1~15）', wide: true,
+                code: "for (var i = 1; i <= 15; i++) {\n    if (i % 15 === 0)      console.log('FizzBuzz');\n    else if (i % 3 === 0)  console.log('Fizz');\n    else if (i % 5 === 0)  console.log('Buzz');\n    else                   console.log(i);\n}",
+                run: function () {
+                    var chips = [];
+                    for (var i = 1; i <= 15; i++) {
+                        if (i % 15 === 0)     chips.push({ t: 'FizzBuzz', c: 'fb' });
+                        else if (i % 3 === 0) chips.push({ t: 'Fizz', c: 'f' });
+                        else if (i % 5 === 0) chips.push({ t: 'Buzz', c: 'b' });
+                        else                  chips.push({ t: String(i), c: '' });
+                    }
+                    return { chips: chips };
+                }
+            }
+        ];
+
+        // 渲染卡片
+        var grid = document.getElementById('grid');
+        demos.forEach(function (d) {
+            var card = document.createElement('article');
+            card.className = 'card' + (d.wide ? ' wide' : '');
+
+            var head = document.createElement('div');
+            head.className = 'card-head';
+            head.innerHTML = '<h2>' + d.name + '</h2><span class="tag ' +
+                (d.tag === '循环' ? 'loop' : d.tag === '条件' ? 'cond' : 'mix') + '">' + d.tag + '</span>';
+
+            var code = document.createElement('pre');
+            code.className = 'code-box';
+            code.textContent = d.code;
+
+            var out = document.createElement('div');
+            out.className = 'out';
+            var result = d.run();
+            if (result.chips) {
+                var chips = document.createElement('div');
+                chips.className = 'chips';
+                result.chips.forEach(function (c) {
+                    var s = document.createElement('span');
+                    if (c.c) s.className = c.c;
+                    s.textContent = c.t;
+                    chips.appendChild(s);
+                });
+                out.appendChild(chips);
+            } else {
+                result.lines.forEach(function (t) {
+                    var l = document.createElement('div');
+                    l.className = 'line';
+                    l.textContent = t;
+                    out.appendChild(l);
+                });
+            }
+
+            card.appendChild(head);
+            card.appendChild(code);
+            card.appendChild(out);
+            grid.appendChild(card);
+        });
+    </script>
+</body>
+</html>
