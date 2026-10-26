@@ -1,0 +1,33 @@
+/* ============================================================
+   font/iconfont.css —— iconfont 类名映射
+   本地没有阿里巴巴 iconfont 字体文件，这里用本站已有的
+   Font Awesome 字体（cdn/fontawesome/webfonts）承载同名类：
+   .iconfont 提供字体族，.icon-xxx:before 提供图标码点
+   ============================================================ */
+
+@font-face {
+    font-family: "iconfont";
+    src: url("../cdn/fontawesome/webfonts/fa-solid-900.woff2") format("woff2");
+    font-weight: 900;
+    font-style: normal;
+    font-display: block;
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    font-weight: 900;
+    font-style: normal;
+    display: inline-block;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+
+.icon-shouye:before   { content: "\f015"; }  /* 首页（房子） */
+.icon-tuijian:before  { content: "\f005"; }  /* 推荐（星星） */
+.icon-faxian:before   { content: "\f14e"; }  /* 发现（指南针） */
+.icon-bianji:before   { content: "\f304"; }  /* 编辑（笔）→ String */
+.icon-zengjia:before  { content: "\2b"; }    /* 增加（加号）→ Number */
+.icon-xihuan:before   { content: "\f004"; }  /* 喜欢（心）→ Boolean */
+.icon-gengduo:before  { content: "\f141"; }  /* 更多（省略号）→ Undefined */
+.icon-shanchu:before  { content: "\f1f8"; }  /* 删除（垃圾桶）→ Null */
+.icon-gouwuche:before { content: "\f07a"; }  /* 购物车 → Object */

@@ -13,6 +13,17 @@ Static HTML/CSS coursework portfolio for a Chinese "高级网页设计" class (s
 
 ## Conventions that are easy to break
 
+- Every newly created HTML file MUST start with a comment header (placed right after `<!DOCTYPE html>`) containing, in Chinese: 功能名称 (feature name), 作者 赵婉彤, 建立时间 (creation date, `YYYY-MM-DD`), and 使用大模型 (the LLM used). Example:
+
+  ```html
+  <!--
+      功能名称：数7游戏
+      作者：赵婉彤
+      建立时间：2026-10-26
+      使用大模型：GLM-5.3-Flash
+  -->
+  ```
+
 - Every exercise page must be linked from `index.html` (the `.work` card grid, ~line 244+). Adding a page without the link makes it invisible.
 - `4-1 css2.html` has a literal space in its filename; it must stay URL-encoded as `4-1%20css2.html` in links. Other filenames contain Chinese characters — link them with the exact filenames.
 - Content, comments, and `lang` attributes are Chinese coursework; titles like "Document" are intentionally left as-is by the student. Do not "clean up", translate, or normalize pages unless asked.

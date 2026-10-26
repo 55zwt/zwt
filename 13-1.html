@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13-1 · Font Awesome 字体图标</title>
+    <link rel="stylesheet" href="cdn/fontawesome/css/all.min.css">
+    <style>
+        :root {
+            --yuan_bg: #12161f;
+            --yuan_panel: #1c2230;
+            --yuan_panel2: #232b3d;
+            --yuan_line: #3a4460;
+            --yuan_txt: #f2f4f8;
+            --yuan_sub: #9aa6bf;
+            --yuan_accent: #ffb703;
+            --yuan_accent2: #4cc9f0;
+            --yuan_icon_size: 1.75rem;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 4vh 4vw 6vh;
+            color: var(--yuan_txt);
+            background-color: var(--yuan_bg);
+            background-image: radial-gradient(rgba(255, 255, 255, .07) 1px, transparent 1px);
+            background-size: 26px 26px;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, p { margin: 0; }
+        a { color: var(--yuan_accent2); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .yuan_page { width: min(1080px, 100%); margin: 0 auto; }
+
+        .yuan_head {
+            padding: 2.4em 2em;
+            border: 1px solid var(--yuan_line);
+            border-bottom: 0.4em solid var(--yuan_accent);
+            background: rgba(28, 34, 48, .9);
+        }
+
+        .yuan_head h1 { font-size: clamp(1.5rem, 4vw, 2.6rem); letter-spacing: .08em; }
+
+        .yuan_head p {
+            max-width: 52em;
+            margin-top: .7em;
+            color: var(--yuan_sub);
+            font-size: 1rem;
+        }
+
+        .yuan_section {
+            margin-top: 1.6rem;
+            padding: 1.6rem;
+            border: 1px solid var(--yuan_line);
+            background: rgba(28, 34, 48, .72);
+        }
+
+        .yuan_section > h2 {
+            margin-bottom: .3em;
+            color: var(--yuan_accent);
+            font-size: 1.15rem;
+            letter-spacing: .12em;
+        }
+
+        .yuan_desc {
+            margin-bottom: 1.2rem;
+            color: var(--yuan_sub);
+            font-size: .9rem;
+        }
+
+        .yuan_code {
+            display: inline-block;
+            padding: .1em .6em;
+            border: 1px dashed var(--yuan_line);
+            background: rgba(76, 201, 240, .12);
+            color: var(--yuan_accent2);
+            font-family: Consolas, monospace;
+            font-size: .9em;
+        }
+
+        /* ---------- 3D 立方体（字体图标） ---------- */
+        .yuan_scene {
+            width: 13rem;
+            height: 13rem;
+            margin: 1rem auto 1.4rem;
+            perspective: 40rem;
+        }
+
+        .yuan_cube {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: yuan_spin 16s linear infinite;
+        }
+
+        .yuan_face {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            width: 13rem;
+            height: 13rem;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--yuan_accent);
+            background: rgba(255, 183, 3, .14);
+            font-size: 3.2rem;
+        }
+
+        .yuan_face span {
+            margin-top: .4em;
+            color: var(--yuan_sub);
+            font-size: .8rem;
+            letter-spacing: .1em;
+        }
+
+        .yuan_face_front  { transform: translateZ(6.5rem); }
+        .yuan_face_back   { transform: rotateY(180deg) translateZ(6.5rem); }
+        .yuan_face_right  { transform: rotateY(90deg) translateZ(6.5rem); }
+        .yuan_face_left   { transform: rotateY(-90deg) translateZ(6.5rem); }
+        .yuan_face_top    { transform: rotateX(90deg) translateZ(6.5rem); }
+        .yuan_face_bottom { transform: rotateX(-90deg) translateZ(6.5rem); }
+
+        @keyframes yuan_spin {
+            from { transform: rotateX(0deg) rotateY(0deg); }
+            to   { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        /* ---------- 图标网格 ---------- */
+        .yuan_bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            padding: .8rem 1rem;
+            border: 1px solid var(--yuan_line);
+            background: var(--yuan_panel2);
+            font-size: .9rem;
+        }
+
+        .yuan_bar label { color: var(--yuan_sub); }
+
+        .yuan_range {
+            width: min(320px, 60%);
+            accent-color: var(--yuan_accent);
+        }
+
+        .yuan_readout {
+            color: var(--yuan_accent);
+            font-family: Consolas, monospace;
+        }
+
+        .yuan_grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: .9rem;
+        }
+
+        .yuan_cell {
+            position: relative;
+            min-height: 8.5rem;
+            perspective: 60rem;
+            cursor: pointer;
+        }
+
+        .yuan_cell_inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform .7s cubic-bezier(.2, .7, .3, 1);
+        }
+
+        .yuan_cell:hover .yuan_cell_inner { transform: rotateY(180deg); }
+
+        .yuan_cell_front,
+        .yuan_cell_back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--yuan_line);
+            border-top: 3px solid var(--yuan_accent2);
+            background: var(--yuan_panel);
+            backface-visibility: hidden;
+        }
+
+        .yuan_cell_front i {
+            color: var(--yuan_accent);
+            font-size: var(--yuan_icon_size);
+            transition: transform .2s ease;
+        }
+
+        .yuan_cell:hover .yuan_cell_front i { transform: scale(1.1); }
+
+        .yuan_cell_name {
+            margin-top: .7em;
+            color: var(--yuan_sub);
+            font-size: .8rem;
+        }
+
+        .yuan_cell_back {
+            padding: .8em;
+            background: linear-gradient(135deg, #2b3450, var(--yuan_panel2));
+            transform: rotateY(180deg);
+            color: var(--yuan_accent2);
+            font-family: Consolas, monospace;
+            font-size: .78rem;
+            line-height: 1.6;
+            text-align: center;
+            word-break: break-all;
+        }
+
+        /* ---------- 字重对比 ---------- */
+        .yuan_weight_row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .yuan_weight_card {
+            padding: 1.2rem;
+            border: 1px solid var(--yuan_line);
+            background: var(--yuan_panel);
+            text-align: center;
+        }
+
+        .yuan_weight_icons {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            margin-bottom: .8rem;
+            color: var(--yuan_accent2);
+            font-size: 2.2rem;
+        }
+
+        .yuan_weight_card h3 { font-size: .95rem; letter-spacing: .1em; }
+        .yuan_weight_card p { margin-top: .4em; color: var(--yuan_sub); font-size: .82rem; }
+
+        .yuan_note {
+            margin-top: 1.2rem;
+            padding: 1rem 1.2rem;
+            border-left: 4px solid var(--yuan_accent);
+            background: rgba(255, 183, 3, .1);
+            color: var(--yuan_sub);
+            font-size: .88rem;
+        }
+
+        .yuan_note p + p { margin-top: .5em; }
+
+        /* ---------- 导航 ---------- */
+        .yuan_nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.6rem;
+            padding: 1.2rem 1.4rem;
+            border: 1px solid var(--yuan_accent2);
+            background: rgba(76, 201, 240, .1);
+        }
+
+        .yuan_btn {
+            display: inline-block;
+            padding: .55em 1.5em;
+            border: 2px solid var(--yuan_accent);
+            background: var(--yuan_accent);
+            color: #12161f;
+            font-size: .95rem;
+            font-weight: bold;
+            letter-spacing: .08em;
+            cursor: pointer;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .yuan_btn:hover { transform: translateY(-3px); box-shadow: 0 6px 0 rgba(255, 183, 3, .35); text-decoration: none; }
+
+        .yuan_btn_ghost {
+            border-color: var(--yuan_accent2);
+            background: transparent;
+            color: var(--yuan_accent2);
+        }
+
+        .yuan_btn_ghost:hover { box-shadow: 0 6px 0 rgba(76, 201, 240, .3); }
+
+        footer {
+            margin-top: 1.6rem;
+            color: var(--yuan_sub);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 3vh 4vw 5vh; }
+            .yuan_head, .yuan_section { padding: 1.2rem; }
+            .yuan_scene { width: 10rem; height: 10rem; perspective: 30rem; }
+            .yuan_face { width: 10rem; height: 10rem; font-size: 2.4rem; }
+            .yuan_face_front  { transform: translateZ(5rem); }
+            .yuan_face_back   { transform: rotateY(180deg) translateZ(5rem); }
+            .yuan_face_right  { transform: rotateY(90deg) translateZ(5rem); }
+            .yuan_face_left   { transform: rotateY(-90deg) translateZ(5rem); }
+            .yuan_face_top    { transform: rotateX(90deg) translateZ(5rem); }
+            .yuan_face_bottom { transform: rotateX(-90deg) translateZ(5rem); }
+            .yuan_range { width: 55%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="yuan_page">
+        <header class="yuan_head">
+            <h1>13-1 · Font Awesome 字体图标</h1>
+            <p>本页用<strong>字体图标</strong>方式显示图标：图标不是图片，而是字体里的一个字符，通过 @font-face 引入本地字体文件 cdn/fontawesome/webfonts/*.woff2，再用 <span class="yuan_code">&lt;i class="fa-solid fa-house"&gt;</span> 输出。</p>
+        </header>
+
+        <section class="yuan_section">
+            <h2>CSS3 3D 动画 · 图标立方体</h2>
+            <p class="yuan_desc">六个面各放一个字体图标，perspective: 40rem，translateZ(6.5rem) 撑出立体效果。</p>
+            <div class="yuan_scene">
+                <div class="yuan_cube">
+                    <div class="yuan_face yuan_face_front"><i class="fa-solid fa-house"></i><span>fa-house</span></div>
+                    <div class="yuan_face yuan_face_back"><i class="fa-solid fa-heart"></i><span>fa-heart</span></div>
+                    <div class="yuan_face yuan_face_right"><i class="fa-solid fa-star"></i><span>fa-star</span></div>
+                    <div class="yuan_face yuan_face_left"><i class="fa-solid fa-gear"></i><span>fa-gear</span></div>
+                    <div class="yuan_face yuan_face_top"><i class="fa-solid fa-bell"></i><span>fa-bell</span></div>
+                    <div class="yuan_face yuan_face_bottom"><i class="fa-solid fa-camera"></i><span>fa-camera</span></div>
+                </div>
+            </div>
+            <p class="yuan_desc" style="text-align:center;">立方体由 CSS 关键帧 yuan_spin 驱动，按空格键可暂停。</p>
+        </section>
+
+        <section class="yuan_section">
+            <h2>图标网格</h2>
+            <p class="yuan_desc">拖动滑块改变字号，图标随文字一起缩放——这正是字体图标的特点；鼠标悬停卡片会 3D 翻面显示类名。</p>
+
+            <div class="yuan_bar">
+                <label for="yuan_size">字号</label>
+                <input class="yuan_range" type="range" id="yuan_size" min="16" max="56" value="28" step="2">
+                <span class="yuan_readout" id="yuan_size_value">28px</span>
+            </div>
+
+            <div class="yuan_grid" id="yuan_grid">
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-house"></i><span class="yuan_cell_name">首页</span></div><div class="yuan_cell_back">fa-solid<br>fa-house</div></div></div>
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-magnifying-glass"></i><span class="yuan_cell_name">搜索</span></div><div class="yuan_cell_back">fa-solid<br>fa-magnifying-glass</div></div></div>
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-user"></i><span class="yuan_cell_name">用户</span></div><div class="yuan_cell_back">fa-solid<br>fa-user</div></div></div>
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-gear"></i><span class="yuan_cell_name">设置</span></div><div class="yuan_cell_back">fa-solid<br>fa-gear</div></div></div>
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-heart"></i><span class="yuan_cell_name">收藏</span></div><div class="yuan_cell_back">fa-solid<br>fa-heart</div></div></div>
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-star"></i><span class="yuan_cell_name">星标</span></div><div class="yuan_cell_back">fa-solid<br>fa-star</div></div></div>
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-bell"></i><span class="yuan_cell_name">通知</span></div><div class="yuan_cell_back">fa-solid<br>fa-bell</div></div></div>
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-envelope"></i><span class="yuan_cell_name">邮件</span></div><div class="yuan_cell_back">fa-solid<br>fa-envelope</div></div></div>
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-camera"></i><span class="yuan_cell_name">相机</span></div><div class="yuan_cell_back">fa-solid<br>fa-camera</div></div></div>
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-music"></i><span class="yuan_cell_name">音乐</span></div><div class="yuan_cell_back">fa-solid<br>fa-music</div></div></div>
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-location-dot"></i><span class="yuan_cell_name">定位</span></div><div class="yuan_cell_back">fa-solid<br>fa-location-dot</div></div></div>
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-calendar"></i><span class="yuan_cell_name">日历</span></div><div class="yuan_cell_back">fa-solid<br>fa-calendar</div></div></div>
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-bolt"></i><span class="yuan_cell_name">闪电</span></div><div class="yuan_cell_back">fa-solid<br>fa-bolt</div></div></div>
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-shield-halved"></i><span class="yuan_cell_name">安全</span></div><div class="yuan_cell_back">fa-solid<br>fa-shield-halved</div></div></div>
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-image"></i><span class="yuan_cell_name">图片</span></div><div class="yuan_cell_back">fa-solid<br>fa-image</div></div></div>
+                <div class="yuan_cell"><div class="yuan_cell_inner"><div class="yuan_cell_front"><i class="fa-solid fa-download"></i><span class="yuan_cell_name">下载</span></div><div class="yuan_cell_back">fa-solid<br>fa-download</div></div></div>
+            </div>
+        </section>
+
+        <section class="yuan_section">
+            <h2>字重对比 · solid 与 regular</h2>
+            <p class="yuan_desc">同一个图标类名，换一个字体类就是另一种字重：fa-solid 对应 font-weight: 900，fa-regular 对应 font-weight: 400。</p>
+            <div class="yuan_weight_row">
+                <div class="yuan_weight_card">
+                    <div class="yuan_weight_icons"><i class="fa-solid fa-heart"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-bell"></i></div>
+                    <h3>fa-solid · 900</h3>
+                    <p>实心字重，来自 fa-solid-900.woff2</p>
+                </div>
+                <div class="yuan_weight_card">
+                    <div class="yuan_weight_icons"><i class="fa-regular fa-heart"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-bell"></i></div>
+                    <h3>fa-regular · 400</h3>
+                    <p>常规字重，来自 fa-regular-400.woff2</p>
+                </div>
+                <div class="yuan_weight_card">
+                    <div class="yuan_weight_icons"><i class="fa-solid fa-envelope"></i><i class="fa-solid fa-calendar"></i><i class="fa-solid fa-comment"></i></div>
+                    <h3>颜色与缩放</h3>
+                    <p>颜色、字号、阴影都按文字样式处理</p>
+                </div>
+            </div>
+            <div class="yuan_note">
+                <p>原理：字体文件通过 @font-face 声明为 "Font Awesome 6 Free"，每个图标对应一个 Unicode 编码，例如 fa-house 的 content 是 "\f015"。</p>
+                <p>本地文件：cdn/fontawesome/css/all.min.css + cdn/fontawesome/webfonts/fa-solid-900.woff2、fa-regular-400.woff2（含 ttf 备份），未使用任何在线 CDN。</p>
+            </div>
+        </section>
+
+        <nav class="yuan_nav">
+            <a class="yuan_btn" href="13-2.html">下一页：13-2 Lucide SVG 图标 →</a>
+            <a class="yuan_btn yuan_btn_ghost" href="index.html">返回作品集首页</a>
+        </nav>
+
+        <footer>赵婉彤 · 高级网页设计 · 13-1 Font Awesome 字体图标练习</footer>
+    </div>
+
+    <script>
+        var yuan_sizeInput = document.getElementById('yuan_size');
+        var yuan_sizeText = document.getElementById('yuan_size_value');
+        var yuan_cubeBox = document.querySelector('.yuan_cube');
+        var yuan_paused = false;
+
+        yuan_sizeInput.addEventListener('input', function () {
+            var yuan_px = yuan_sizeInput.value;
+            document.documentElement.style.setProperty('--yuan_icon_size', yuan_px + 'px');
+            yuan_sizeText.textContent = yuan_px + 'px';
+        });
+
+        document.addEventListener('keydown', function (yuan_evt) {
+            if (yuan_evt.code === 'Space') {
+                yuan_paused = !yuan_paused;
+                yuan_cubeBox.style.animationPlayState = yuan_paused ? 'paused' : 'running';
+                yuan_evt.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

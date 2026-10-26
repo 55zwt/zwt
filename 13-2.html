@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13-2 · Lucide SVG 图标</title>
+    <style>
+        :root {
+            --yuan_bg: #0f1524;
+            --yuan_panel: #1a2135;
+            --yuan_panel2: #222b45;
+            --yuan_line: #3a4460;
+            --yuan_txt: #eef2fb;
+            --yuan_sub: #9aa6bf;
+            --yuan_accent: #4cc9f0;
+            --yuan_accent2: #ffd166;
+            --yuan_svg_size: 2.5rem;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 4vh 4vw 6vh;
+            color: var(--yuan_txt);
+            background-color: var(--yuan_bg);
+            background-image:
+                linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
+            background-size: 34px 34px;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, p { margin: 0; }
+        a { color: var(--yuan_accent2); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .yuan_page { width: min(1080px, 100%); margin: 0 auto; }
+
+        .yuan_head {
+            padding: 2.4em 2em;
+            border: 1px solid var(--yuan_line);
+            border-bottom: 0.4em solid var(--yuan_accent);
+            background: rgba(26, 33, 53, .92);
+        }
+
+        .yuan_head h1 { font-size: clamp(1.5rem, 4vw, 2.6rem); letter-spacing: .08em; }
+
+        .yuan_head p {
+            max-width: 52em;
+            margin-top: .7em;
+            color: var(--yuan_sub);
+            font-size: 1rem;
+        }
+
+        .yuan_code {
+            display: inline-block;
+            padding: .1em .6em;
+            border: 1px dashed var(--yuan_line);
+            background: rgba(76, 201, 240, .14);
+            color: var(--yuan_accent);
+            font-family: Consolas, monospace;
+            font-size: .88em;
+        }
+
+        .yuan_section {
+            margin-top: 1.6rem;
+            padding: 1.6rem;
+            border: 1px solid var(--yuan_line);
+            background: rgba(26, 33, 53, .75);
+        }
+
+        .yuan_section > h2 {
+            margin-bottom: .3em;
+            color: var(--yuan_accent);
+            font-size: 1.15rem;
+            letter-spacing: .12em;
+        }
+
+        .yuan_desc {
+            margin-bottom: 1.2rem;
+            color: var(--yuan_sub);
+            font-size: .9rem;
+        }
+
+        /* ---------- CSS3 3D 动画：图标旋转环 ---------- */
+        .yuan_ring_scene {
+            height: 17rem;
+            margin-top: .5rem;
+            perspective: 45rem;
+        }
+
+        .yuan_ring {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: yuan_ring_spin 22s linear infinite;
+        }
+
+        .yuan_ring_item {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            display: flex;
+            width: 5.5rem;
+            height: 5.5rem;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--yuan_accent);
+            border-radius: .8em;
+            background: #f7f9fc;
+            transform-style: preserve-3d;
+        }
+
+        .yuan_ring_item img { width: 2.4rem; height: 2.4rem; }
+
+        .yuan_ring_item span {
+            margin-top: .3em;
+            color: #4b5563;
+            font-size: .68rem;
+            letter-spacing: .06em;
+        }
+
+        .yuan_ring_1 { transform: translate(-50%, -50%) rotateY(0deg) translateZ(9rem); }
+        .yuan_ring_2 { transform: translate(-50%, -50%) rotateY(45deg) translateZ(9rem); }
+        .yuan_ring_3 { transform: translate(-50%, -50%) rotateY(90deg) translateZ(9rem); }
+        .yuan_ring_4 { transform: translate(-50%, -50%) rotateY(135deg) translateZ(9rem); }
+        .yuan_ring_5 { transform: translate(-50%, -50%) rotateY(180deg) translateZ(9rem); }
+        .yuan_ring_6 { transform: translate(-50%, -50%) rotateY(225deg) translateZ(9rem); }
+        .yuan_ring_7 { transform: translate(-50%, -50%) rotateY(270deg) translateZ(9rem); }
+        .yuan_ring_8 { transform: translate(-50%, -50%) rotateY(315deg) translateZ(9rem); }
+
+        @keyframes yuan_ring_spin {
+            from { transform: rotateX(-14deg) rotateY(0deg); }
+            to   { transform: rotateX(-14deg) rotateY(360deg); }
+        }
+
+        /* ---------- SVG 文件网格 ---------- */
+        .yuan_grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: .9rem;
+        }
+
+        .yuan_item {
+            display: flex;
+            min-height: 7.5rem;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--yuan_line);
+            border-top: 3px solid var(--yuan_accent2);
+            border-radius: .3em;
+            background: #f7f9fc;
+            color: #111827;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .yuan_item:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0, 0, 0, .35); }
+
+        .yuan_item img { width: 2rem; height: 2rem; }
+
+        .yuan_item span {
+            margin-top: .6em;
+            color: #4b5563;
+            font-family: Consolas, monospace;
+            font-size: .75rem;
+        }
+
+        /* ---------- 内联 SVG ---------- */
+        .yuan_bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            padding: .8rem 1rem;
+            border: 1px solid var(--yuan_line);
+            background: var(--yuan_panel2);
+            font-size: .9rem;
+        }
+
+        .yuan_bar label { color: var(--yuan_sub); }
+
+        .yuan_range { width: min(300px, 55%); accent-color: var(--yuan_accent); }
+
+        .yuan_readout { color: var(--yuan_accent); font-family: Consolas, monospace; }
+
+        .yuan_swatch {
+            width: 2.2rem;
+            height: 2.2rem;
+            padding: 0;
+            border: 2px solid var(--yuan_line);
+            border-radius: .3em;
+            cursor: pointer;
+        }
+
+        .yuan_swatch[aria-pressed="true"] { border-color: #fff; box-shadow: 0 0 0 2px rgba(255, 255, 255, .35); }
+
+        .yuan_inline_box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.4rem;
+            justify-content: center;
+            padding: 1.6rem 1rem;
+            border: 1px dashed var(--yuan_line);
+            background: rgba(15, 21, 36, .7);
+            color: var(--yuan_accent);
+        }
+
+        .yuan_inline_box svg {
+            width: var(--yuan_svg_size);
+            height: var(--yuan_svg_size);
+            transition: transform .2s ease;
+        }
+
+        .yuan_inline_box svg:hover { transform: scale(1.15) rotate(-6deg); }
+
+        /* ---------- SVG 遮罩上色 ---------- */
+        .yuan_mask_row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            padding: 1.4rem;
+            border: 1px dashed var(--yuan_line);
+            background: rgba(15, 21, 36, .7);
+        }
+
+        .yuan_mask_item {
+            width: 3rem;
+            height: 3rem;
+            background-color: var(--yuan_accent2);
+            -webkit-mask: center / contain no-repeat;
+            mask: center / contain no-repeat;
+            transition: background-color .2s ease, transform .2s ease;
+        }
+
+        .yuan_mask_item:hover { transform: translateY(-4px); background-color: var(--yuan_accent); }
+
+        .yuan_mask_heart  { -webkit-mask-image: url("cdn/lucide/icons/heart.svg");  mask-image: url("cdn/lucide/icons/heart.svg"); }
+        .yuan_mask_star   { -webkit-mask-image: url("cdn/lucide/icons/star.svg");   mask-image: url("cdn/lucide/icons/star.svg"); }
+        .yuan_mask_zap    { -webkit-mask-image: url("cdn/lucide/icons/zap.svg");    mask-image: url("cdn/lucide/icons/zap.svg"); }
+        .yuan_mask_bell   { -webkit-mask-image: url("cdn/lucide/icons/bell.svg");   mask-image: url("cdn/lucide/icons/bell.svg"); }
+        .yuan_mask_download { -webkit-mask-image: url("cdn/lucide/icons/download.svg"); mask-image: url("cdn/lucide/icons/download.svg"); }
+        .yuan_mask_music  { -webkit-mask-image: url("cdn/lucide/icons/music.svg");  mask-image: url("cdn/lucide/icons/music.svg"); }
+
+        .yuan_note {
+            margin-top: 1.2rem;
+            padding: 1rem 1.2rem;
+            border-left: 4px solid var(--yuan_accent);
+            background: rgba(76, 201, 240, .1);
+            color: var(--yuan_sub);
+            font-size: .88rem;
+        }
+
+        .yuan_note p + p { margin-top: .5em; }
+
+        /* ---------- 导航 ---------- */
+        .yuan_nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.6rem;
+            padding: 1.2rem 1.4rem;
+            border: 1px solid var(--yuan_accent2);
+            background: rgba(255, 209, 102, .1);
+        }
+
+        .yuan_btn {
+            display: inline-block;
+            padding: .55em 1.5em;
+            border: 2px solid var(--yuan_accent2);
+            background: var(--yuan_accent2);
+            color: #0f1524;
+            font-size: .95rem;
+            font-weight: bold;
+            letter-spacing: .08em;
+            cursor: pointer;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .yuan_btn:hover { transform: translateY(-3px); box-shadow: 0 6px 0 rgba(255, 209, 102, .3); text-decoration: none; }
+
+        .yuan_btn_ghost {
+            border-color: var(--yuan_accent);
+            background: transparent;
+            color: var(--yuan_accent);
+        }
+
+        .yuan_btn_ghost:hover { box-shadow: 0 6px 0 rgba(76, 201, 240, .3); }
+
+        footer {
+            margin-top: 1.6rem;
+            color: var(--yuan_sub);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 3vh 4vw 5vh; }
+            .yuan_head, .yuan_section { padding: 1.2rem; }
+            .yuan_ring_scene { height: 14rem; }
+            .yuan_ring_item { width: 4.5rem; height: 4.5rem; }
+            .yuan_ring_1 { transform: translate(-50%, -50%) rotateY(0deg) translateZ(7rem); }
+            .yuan_ring_2 { transform: translate(-50%, -50%) rotateY(45deg) translateZ(7rem); }
+            .yuan_ring_3 { transform: translate(-50%, -50%) rotateY(90deg) translateZ(7rem); }
+            .yuan_ring_4 { transform: translate(-50%, -50%) rotateY(135deg) translateZ(7rem); }
+            .yuan_ring_5 { transform: translate(-50%, -50%) rotateY(180deg) translateZ(7rem); }
+            .yuan_ring_6 { transform: translate(-50%, -50%) rotateY(225deg) translateZ(7rem); }
+            .yuan_ring_7 { transform: translate(-50%, -50%) rotateY(270deg) translateZ(7rem); }
+            .yuan_ring_8 { transform: translate(-50%, -50%) rotateY(315deg) translateZ(7rem); }
+            .yuan_range { width: 50%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="yuan_page">
+        <header class="yuan_head">
+            <h1>13-2 · Lucide SVG 图标</h1>
+            <p>本页用 <strong>SVG</strong> 方式显示图标：图标是矢量图形文件，来自本地 cdn/lucide/icons/*.svg。页面里同时演示三种用法——<span class="yuan_code">&lt;img src="cdn/lucide/icons/house.svg"&gt;</span>、内联 <span class="yuan_code">&lt;svg&gt;</span>、以及 CSS mask 把 SVG 当遮罩上色。</p>
+        </header>
+
+        <section class="yuan_section">
+            <h2>CSS3 3D 动画 · 图标旋转环</h2>
+            <p class="yuan_desc">八个 SVG 文件沿 rotateY + translateZ(9rem) 排成一圈，容器 preserve-3d 持续旋转。</p>
+            <div class="yuan_ring_scene">
+                <div class="yuan_ring">
+                    <div class="yuan_ring_item yuan_ring_1"><img src="cdn/lucide/icons/house.svg" alt="首页"><span>house</span></div>
+                    <div class="yuan_ring_item yuan_ring_2"><img src="cdn/lucide/icons/search.svg" alt="搜索"><span>search</span></div>
+                    <div class="yuan_ring_item yuan_ring_3"><img src="cdn/lucide/icons/user.svg" alt="用户"><span>user</span></div>
+                    <div class="yuan_ring_item yuan_ring_4"><img src="cdn/lucide/icons/settings.svg" alt="设置"><span>settings</span></div>
+                    <div class="yuan_ring_item yuan_ring_5"><img src="cdn/lucide/icons/heart.svg" alt="收藏"><span>heart</span></div>
+                    <div class="yuan_ring_item yuan_ring_6"><img src="cdn/lucide/icons/star.svg" alt="星标"><span>star</span></div>
+                    <div class="yuan_ring_item yuan_ring_7"><img src="cdn/lucide/icons/bell.svg" alt="通知"><span>bell</span></div>
+                    <div class="yuan_ring_item yuan_ring_8"><img src="cdn/lucide/icons/camera.svg" alt="相机"><span>camera</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="yuan_section">
+            <h2>方式一 · img 引用 SVG 文件</h2>
+            <p class="yuan_desc">直接把 cdn/lucide/icons/ 目录下的 16 个 .svg 文件作为图片引入，线条颜色是文件里写好的 stroke="currentColor"（在图片环境下呈现为黑色，所以放在浅色卡片上）。</p>
+            <div class="yuan_grid">
+                <div class="yuan_item"><img src="cdn/lucide/icons/house.svg" alt="首页"><span>house.svg</span></div>
+                <div class="yuan_item"><img src="cdn/lucide/icons/search.svg" alt="搜索"><span>search.svg</span></div>
+                <div class="yuan_item"><img src="cdn/lucide/icons/user.svg" alt="用户"><span>user.svg</span></div>
+                <div class="yuan_item"><img src="cdn/lucide/icons/settings.svg" alt="设置"><span>settings.svg</span></div>
+                <div class="yuan_item"><img src="cdn/lucide/icons/heart.svg" alt="收藏"><span>heart.svg</span></div>
+                <div class="yuan_item"><img src="cdn/lucide/icons/star.svg" alt="星标"><span>star.svg</span></div>
+                <div class="yuan_item"><img src="cdn/lucide/icons/bell.svg" alt="通知"><span>bell.svg</span></div>
+                <div class="yuan_item"><img src="cdn/lucide/icons/mail.svg" alt="邮件"><span>mail.svg</span></div>
+                <div class="yuan_item"><img src="cdn/lucide/icons/camera.svg" alt="相机"><span>camera.svg</span></div>
+                <div class="yuan_item"><img src="cdn/lucide/icons/music.svg" alt="音乐"><span>music.svg</span></div>
+                <div class="yuan_item"><img src="cdn/lucide/icons/map-pin.svg" alt="定位"><span>map-pin.svg</span></div>
+                <div class="yuan_item"><img src="cdn/lucide/icons/calendar.svg" alt="日历"><span>calendar.svg</span></div>
+                <div class="yuan_item"><img src="cdn/lucide/icons/zap.svg" alt="闪电"><span>zap.svg</span></div>
+                <div class="yuan_item"><img src="cdn/lucide/icons/shield.svg" alt="安全"><span>shield.svg</span></div>
+                <div class="yuan_item"><img src="cdn/lucide/icons/image.svg" alt="图片"><span>image.svg</span></div>
+                <div class="yuan_item"><img src="cdn/lucide/icons/download.svg" alt="下载"><span>download.svg</span></div>
+            </div>
+        </section>
+
+        <section class="yuan_section">
+            <h2>方式二 · 内联 SVG</h2>
+            <p class="yuan_desc">把 SVG 代码写进 HTML，stroke="currentColor" 让图标继承文字颜色，改变的是矢量路径，不会失真。</p>
+
+            <div class="yuan_bar">
+                <label>颜色</label>
+                <button class="yuan_swatch" type="button" data-yuan-color="#4cc9f0" style="background:#4cc9f0" aria-label="青色"></button>
+                <button class="yuan_swatch" type="button" data-yuan-color="#ffd166" style="background:#ffd166" aria-label="黄色"></button>
+                <button class="yuan_swatch" type="button" data-yuan-color="#ff5d8f" style="background:#ff5d8f" aria-label="粉色"></button>
+                <button class="yuan_swatch" type="button" data-yuan-color="#80ed99" style="background:#80ed99" aria-label="绿色"></button>
+                <button class="yuan_swatch" type="button" data-yuan-color="#eef2fb" style="background:#eef2fb" aria-label="白色"></button>
+                <label for="yuan_svg_size">尺寸</label>
+                <input class="yuan_range" type="range" id="yuan_svg_size" min="24" max="80" value="40" step="4">
+                <span class="yuan_readout" id="yuan_svg_size_value">40px</span>
+            </div>
+
+            <div class="yuan_inline_box" id="yuan_inline_box">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+            </div>
+        </section>
+
+        <section class="yuan_section">
+            <h2>方式三 · CSS mask 用 SVG 上色</h2>
+            <p class="yuan_desc">mask-image 指向本地 SVG 文件，用 background-color 决定颜色，同一份文件可以染出任意颜色。</p>
+            <div class="yuan_mask_row">
+                <div class="yuan_mask_item yuan_mask_heart" role="img" aria-label="收藏"></div>
+                <div class="yuan_mask_item yuan_mask_star" role="img" aria-label="星标"></div>
+                <div class="yuan_mask_item yuan_mask_zap" role="img" aria-label="闪电"></div>
+                <div class="yuan_mask_item yuan_mask_bell" role="img" aria-label="通知"></div>
+                <div class="yuan_mask_item yuan_mask_download" role="img" aria-label="下载"></div>
+                <div class="yuan_mask_item yuan_mask_music" role="img" aria-label="音乐"></div>
+            </div>
+            <div class="yuan_note">
+                <p>本地文件：cdn/lucide/icons/ 下 16 个 .svg，来自 lucide-static v0.469.0（ISC 协议），全部下载到本目录，不使用在线 CDN。</p>
+                <p>与字体图标对比：SVG 每个图标是独立文件，能直接改 stroke、fill、mask 上色；字体图标则像文字，靠字号和文字颜色控制。</p>
+            </div>
+        </section>
+
+        <nav class="yuan_nav">
+            <a class="yuan_btn" href="13-1.html">← 上一页：13-1 Font Awesome 字体图标</a>
+            <a class="yuan_btn yuan_btn_ghost" href="index.html">返回作品集首页</a>
+        </nav>
+
+        <footer>赵婉彤 · 高级网页设计 · 13-2 Lucide SVG 图标练习</footer>
+    </div>
+
+    <script>
+        var yuan_swatchList = document.querySelectorAll('.yuan_swatch');
+        var yuan_inlineBox = document.getElementById('yuan_inline_box');
+        var yuan_sizeRange = document.getElementById('yuan_svg_size');
+        var yuan_sizeText = document.getElementById('yuan_svg_size_value');
+        var yuan_index;
+
+        for (yuan_index = 0; yuan_index < yuan_swatchList.length; yuan_index++) {
+            yuan_swatchList[yuan_index].addEventListener('click', function (yuan_evt) {
+                var yuan_current = yuan_evt.currentTarget;
+                yuan_inlineBox.style.color = yuan_current.getAttribute('data-yuan-color');
+                var yuan_btn;
+                for (yuan_btn = 0; yuan_btn < yuan_swatchList.length; yuan_btn++) {
+                    yuan_swatchList[yuan_btn].setAttribute('aria-pressed', 'false');
+                }
+                yuan_current.setAttribute('aria-pressed', 'true');
+            });
+        }
+
+        yuan_sizeRange.addEventListener('input', function () {
+            var yuan_px = yuan_sizeRange.value;
+            document.documentElement.style.setProperty('--yuan_svg_size', yuan_px + 'px');
+            yuan_sizeText.textContent = yuan_px + 'px';
+        });
+    </script>
+</body>
+</html>
