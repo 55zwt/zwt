@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!--
+    功能名称：浏览周排行榜
+    作者：赵婉彤
+    建立时间：2026-10-29
+    使用大模型：GLM-5.3-Flash
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>16-3 · 浏览周排行榜</title>
+    <!-- iconfont 字体图标（本地 font/iconfont.css） -->
+    <link rel="stylesheet" href="font/iconfont.css">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 40px 16px;
+            background: #eef2f6;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+        }
+        /* ===== 排行榜卡片 ===== */
+        .board {
+            width: min(460px, 100%);
+            margin: 0 auto;
+            border: 1px solid #dfe6ee;
+            border-radius: 5px;
+            background: #fff;
+            box-shadow: 0 4px 14px rgba(40, 70, 110, .08);
+            overflow: hidden;
+        }
+        /* 浅蓝标题栏 */
+        .board-head {
+            padding: 12px 18px;
+            background: linear-gradient(180deg, #e3eefb, #d7e7f8);
+            border-bottom: 1px solid #c3d9ef;
+        }
+        .board-head h1 {
+            margin: 0;
+            font-size: 17px;
+            color: #1f6cb4;
+            letter-spacing: .04em;
+        }
+        /* 榜单列表：JS 用对象数组渲染 */
+        .board-list { list-style: none; margin: 0; padding: 0; }
+        .board-list li {
+            padding: 10px 18px 9px;
+            border-bottom: 1px solid #f0f2f5;
+        }
+        .board-list li:last-child { border-bottom: none; }
+        /* 第一行：名次 + 标题（单行省略） */
+        .row-tit { display: flex; align-items: baseline; gap: 10px; }
+        .rank {
+            min-width: 18px;
+            color: #2f7ec2;
+            font: 700 15px/1.4 "Consolas", "Microsoft YaHei", sans-serif;
+        }
+        .tit {
+            flex: 1;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            color: #333c46;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .tit:hover { color: #2f7ec2; }
+        /* 第二行：时间 / 用户 / 浏览 / 评论 */
+        .row-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 5px;
+            color: #9aa5ad;
+            font-size: 13px;
+        }
+        .row-meta span { display: inline-flex; align-items: center; gap: 5px; }
+        .row-meta .iconfont { font-size: 13px; color: #b0bac3; }
+    </style>
+</head>
+<body>
+    <section class="board" aria-label="浏览周排行榜">
+        <header class="board-head">
+            <h1>浏览周排行榜</h1>
+        </header>
+        <ul class="board-list" id="list">
+            <!-- JS 渲染 10 条榜单 -->
+        </ul>
+    </section>
+
+    <script>
+        // 榜单数据：对象数组（呼应 16-2 对象一课）
+        var posts = [
+            { rank: 1,  title: '纽约大都会里复刻了座苏州网师园，老外都看呆了', date: '10-24', user: '路德维希维', views: 9582, comments: 35 },
+            { rank: 2,  title: '越南论坛：越南游客蜂拥前往中国，回程行李全是“中国制造”', date: '10-27', user: 'yuan2301', views: 8613, comments: 89 },
+            { rank: 3,  title: '贝森特下令全球银行取消与中国相关业务', date: '10-24', user: 'Natsuo', views: 8359, comments: 19 },
+            { rank: 4,  title: '巴西人逛中国“贫民窟”，给巴西网民整不会了', date: '10-28', user: '青丘国的守', views: 8104, comments: 23 },
+            { rank: 5,  title: 'DeepSeek 公布了 DeepInfen 这个新模型的测评结果', date: '10-24', user: '兰陵笑笑生', views: 7925, comments: 35 },
+            { rank: 6,  title: '公元前1250年的古代汉语——甲骨文是怎么读的', date: '10-23', user: '昨日重新', views: 7816, comments: 34 },
+            { rank: 7,  title: 'APP聊了个21岁中国男生，本人女19，该继续吗', date: '10-22', user: '爱无痕吗', views: 7620, comments: 58 },
+            { rank: 8,  title: '越南话题：中国搞农业的方式，为什么值得越南学习', date: '10-22', user: '驿路遥马', views: 7402, comments: 26 },
+            { rank: 9,  title: '这款新款穿戴式机器人助力步行康复训练', date: '10-26', user: '花有重开日', views: 7238, comments: 26 },
+            { rank: 10, title: '徒步穿越中国一年：前后对比1', date: '10-23', user: '哎呀嘛', views: 7169, comments: 12 }
+        ];
+
+        var list = document.getElementById('list');
+        posts.forEach(function (p) {
+            var li = document.createElement('li');
+            li.innerHTML =
+                '<div class="row-tit">' +
+                    '<span class="rank">' + p.rank + '</span>' +
+                    '<a class="tit" href="javascript:void(0)" title="' + p.title + '">' + p.title + '</a>' +
+                '</div>' +
+                '<div class="row-meta">' +
+                    '<span><i class="iconfont icon-shizhong"></i>' + p.date + '</span>' +
+                    '<span><i class="iconfont icon-yonghu"></i>' + p.user + '</span>' +
+                    '<span><i class="iconfont icon-sousuo"></i>' + p.views + '</span>' +
+                    '<span><i class="iconfont icon-pinglun"></i>' + p.comments + '</span>' +
+                '</div>';
+            list.appendChild(li);
+        });
+    </script>
+</body>
+</html>

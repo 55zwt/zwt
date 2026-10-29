@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<!--
+    功能名称：文学社科书城（标签切换）
+    作者：赵婉彤
+    建立时间：2026-10-29
+    使用大模型：GLM-5.3-Flash
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>16-4 · 文学社科书城</title>
+    <style>
+        :root { --green: #7aa13c; --green-dark: #55731d; --red: #cc2222; }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 30px 16px 50px;
+            background: #fff;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            color: #333;
+        }
+        .wrap { width: min(1000px, 100%); margin: 0 auto; }
+        .page-title {
+            margin: 0 0 14px;
+            font-size: 20px;
+            color: var(--green-dark);
+            font-weight: 700;
+        }
+        .page-title-rule { height: 2px; background: var(--green); margin-bottom: 0; }
+
+        /* ===== 三栏布局 ===== */
+        .cols { display: flex; border: 1px solid #eee; border-top: none; }
+        .col-left { width: 212px; border-right: 1px solid #e8e8e8; flex-shrink: 0; }
+        .col-mid { flex: 1; padding: 0 26px; min-width: 0; }
+        .col-right { width: 238px; border-left: 1px solid #e8e8e8; flex-shrink: 0; padding: 14px 18px; }
+
+        /* ===== 左栏 主编推荐 ===== */
+        .rec-head {
+            margin: 0; padding: 14px 0 12px;
+            text-align: center; font-size: 16px; color: #333;
+            border-bottom: 1px solid #e8e8e8;
+        }
+        .rec-cover { position: relative; width: 150px; margin: 18px auto 0; }
+        .rec-cover img { display: block; width: 150px; height: 198px; object-fit: cover; }
+        .rec-badge {
+            position: absolute; top: -8px; left: -12px;
+            background: #4d9e1f; color: #fff;
+            font-size: 12px; font-weight: 700; font-style: italic;
+            padding: 3px 9px;
+        }
+        .rec-title { margin: 12px 0; text-align: center; font-size: 14px; font-weight: 700; color: #333; }
+        .rec-desc { margin: 0; padding: 0 6px; color: #a5a5a5; font-size: 13px; line-height: 1.9; }
+        .rec-list { list-style: none; margin: 14px 0 0; padding: 0 6px 16px; }
+        .rec-list li { color: #999; font-size: 13px; line-height: 2.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .rec-list li::before { content: "•"; color: #bbb; margin-right: 8px; }
+
+        /* ===== 中栏 标签页 ===== */
+        .tabs { display: flex; border-bottom: 1px solid #e5e5e5; }
+        .tab {
+            padding: 13px 24px 11px;
+            border: none; background: none; cursor: pointer;
+            font-size: 15px; color: #666;
+            font-family: inherit;
+            position: relative;
+        }
+        .tab:hover { color: #333; }
+        .tab.on { color: #333; font-weight: 700; }
+        .tab.on::after {
+            content: ""; position: absolute;
+            left: 0; right: 0; bottom: -1px; height: 2px;
+            background: var(--green);
+        }
+        .panel { display: none; }
+        .panel.on {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 26px 24px;
+            padding: 22px 0 26px;
+            animation: fadeUp .4s ease;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: none; }
+        }
+        .book { cursor: pointer; }
+        .book img {
+            display: block; width: 100%; height: 150px;
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .14);
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+        .book:hover img {
+            transform: translateY(-5px) scale(1.04);
+            box-shadow: 0 10px 22px rgba(60, 90, 20, .28);
+        }
+        .book h4 {
+            margin: 9px 0 4px; font-size: 14px; color: #333; font-weight: 700;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            transition: color .2s ease;
+        }
+        .book:hover h4 { color: var(--green-dark); }
+        .book .price { margin: 0; color: var(--red); font-size: 14px; font-weight: 700; }
+
+        /* ===== 右栏 订阅榜 ===== */
+        .sub-title { margin: 0 0 4px; font-size: 15px; color: #333; font-weight: 700; }
+        .sub-list { list-style: none; margin: 0; padding: 0; animation: fadeUp .4s ease; }
+        .sub-list li {
+            display: flex; align-items: center; gap: 8px;
+            padding: 7px 0;
+            border-bottom: 1px dotted #ddd;
+            font-size: 13px; color: #555;
+            white-space: nowrap; overflow: hidden;
+        }
+        .sub-list .no {
+            flex-shrink: 0;
+            width: 16px; height: 16px; line-height: 15px;
+            text-align: center;
+            font-size: 12px; color: #999;
+            border: 1px solid #ccc; border-radius: 2px;
+        }
+        .sub-list .no.hot { background: #e4393c; border-color: #e4393c; color: #fff; }
+        .sub-list .txt { overflow: hidden; text-overflow: ellipsis; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1 class="page-title">文学社科</h1>
+        <div class="page-title-rule"></div>
+        <div class="cols">
+            <!-- 左栏：主编推荐 -->
+            <aside class="col-left">
+                <h2 class="rec-head">主编推荐</h2>
+                <div class="rec-cover">
+                    <img src="img/shop/rui.jpg" alt="芮成钢《虚实之间》">
+                    <span class="rec-badge">★力荐</span>
+                </div>
+                <p class="rec-title">芮成钢：《虚实之间》</p>
+                <p class="rec-desc">有十年记者生涯对东西方文化的洞悉，又有与奥巴马等政要零距离接触的机会，看芮成钢如何评说这世界。</p>
+                <ul class="rec-list">
+                    <li>兄弟教我在义乌的发财史</li>
+                    <li>读佛即是拜佛：唐僧传</li>
+                    <li>二战苏联陆军单兵装备</li>
+                </ul>
+            </aside>
+
+            <!-- 中栏：三个标签页 -->
+            <main class="col-mid">
+                <nav class="tabs" id="tabs"></nav>
+                <div id="panels"></div>
+            </main>
+
+            <!-- 右栏：订阅榜 -->
+            <aside class="col-right">
+                <h3 class="sub-title" id="subTitle"></h3>
+                <ol class="sub-list" id="subList"></ol>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // 图书数据：对象嵌套数组（呼应本章对象与数组）
+        var data = {
+            novel: {
+                tab: '流行小说', subName: '流行小说订阅榜',
+                books: [
+                    { img: 'img/shop/a1.jpg', title: '省长的女婿',       price: '5.98' },
+                    { img: 'img/shop/a2.jpg', title: '辛夷坞：致青春',   price: '5.00' },
+                    { img: 'img/shop/a3.jpg', title: '越位',             price: '2.99' },
+                    { img: 'img/shop/a4.jpg', title: '扫黑',             price: '6.40' },
+                    { img: 'img/shop/a5.jpg', title: '我的帝王生涯',     price: '4.00' },
+                    { img: 'img/shop/a6.jpg', title: '南水北调书记',     price: '5.98' },
+                    { img: 'img/shop/a7.jpg', title: '1／14第一季',      price: '4.00' },
+                    { img: 'img/shop/a8.jpg', title: '辛夷坞：原来',     price: '4.50' }
+                ],
+                sub: ['山西煤老板（全文）', '你不可不知的人性（全二）', '刻意的距离', '梅雨的季节（全文）', '大清相国（全文）', '情势（全文）', '省委班子2（全文）', '静水流深（全文）', '生死疲劳（全文）', '金手指（全文）']
+            },
+            history: {
+                tab: '社科历史', subName: '社科历史订阅榜',
+                books: [
+                    { img: 'img/shop/b1.jpg', title: '奋斗仕途',               price: '4.90' },
+                    { img: 'img/shop/b2.jpg', title: '历史选择了邓小平',       price: '6.80' },
+                    { img: 'img/shop/b3.jpg', title: '钱穆：中国民族性及中国文明', price: '7.50' },
+                    { img: 'img/shop/b4.jpg', title: '刺杀林肯',               price: '5.20' },
+                    { img: 'img/shop/b5.jpg', title: '资本论',                 price: '4.80' },
+                    { img: 'img/shop/b6.jpg', title: '朱元璋传',               price: '5.60' },
+                    { img: 'img/shop/b7.jpg', title: '大故宫',                 price: '8.00' },
+                    { img: 'img/shop/b8.jpg', title: '皇后历史隐秘',           price: '4.20' }
+                ],
+                sub: ['大故宫（全文）', '历史选择了邓小平（全文）', '旧制度与大革命（全文）', '中国大历史（全文）', '万历十五年（全文）', '邓小平时代（全文）', '货币（全文）', '激荡三十年（全二）', '资本论（全文）', '野蛮生长（全文）']
+            },
+            art: {
+                tab: '文学艺术', subName: '文学艺术订阅榜',
+                books: [
+                    { img: 'img/shop/c1.jpg', title: '武昌城',           price: '4.50' },
+                    { img: 'img/shop/c2.jpg', title: '贾平凹作品选',     price: '3.00' },
+                    { img: 'img/shop/c3.jpg', title: '最后一个匈奴',     price: '4.00' },
+                    { img: 'img/shop/c4.jpg', title: '岁月与性情',       price: '8.00' },
+                    { img: 'img/shop/c5.jpg', title: '浮生六记',         price: '3.00' },
+                    { img: 'img/shop/c6.jpg', title: '周国平：宝贝',     price: '8.00' },
+                    { img: 'img/shop/c7.jpg', title: '岳飞传',           price: '3.00' },
+                    { img: 'img/shop/c8.jpg', title: '戴安娜的眼睛',     price: '5.36' }
+                ],
+                sub: ['2012诺贝尔文学奖得主莫言', '莫言：2012诺贝尔文学奖得主', '逃离：2013诺贝尔文学奖得', '青春（韩寒2011最新作品）', '教你幽默到心田', '宝贝，宝贝', '白魔窟——白粉仔的十二年', '中国式关系（全文）', '于丹：重温最美古诗词', '妞妞：一个父亲的札记']
+            }
+        };
+
+        var tabsBox = document.getElementById('tabs');
+        var panelsBox = document.getElementById('panels');
+        var subTitle = document.getElementById('subTitle');
+        var subList = document.getElementById('subList');
+        var keys = Object.keys(data);
+
+        // 渲染标签按钮与三个图书面板
+        keys.forEach(function (key, i) {
+            var g = data[key];
+            var btn = document.createElement('button');
+            btn.className = 'tab' + (i === 0 ? ' on' : '');
+            btn.textContent = g.tab;
+            btn.addEventListener('click', function () { switchTab(key); });
+            tabsBox.appendChild(btn);
+
+            var panel = document.createElement('div');
+            panel.className = 'panel' + (i === 0 ? ' on' : '');
+            panel.id = 'panel-' + key;
+            g.books.forEach(function (b) {
+                var d = document.createElement('div');
+                d.className = 'book';
+                d.innerHTML = '<img src="' + b.img + '" alt="' + b.title + '">' +
+                              '<h4>' + b.title + '</h4>' +
+                              '<p class="price">¥ ' + b.price + '</p>';
+                panel.appendChild(d);
+            });
+            panelsBox.appendChild(panel);
+        });
+
+        // 切换标签：面板与订阅榜联动，带淡入上移动画
+        function switchTab(key) {
+            var g = data[key];
+            document.querySelectorAll('.tab').forEach(function (t, i) {
+                t.classList.toggle('on', keys[i] === key);
+            });
+            document.querySelectorAll('.panel').forEach(function (p) {
+                p.classList.remove('on');
+            });
+            var panel = document.getElementById('panel-' + key);
+            panel.classList.remove('on');
+            void panel.offsetWidth;            // 强制重排，让动画可以重复触发
+            panel.classList.add('on');
+
+            subTitle.textContent = g.subName;
+            subList.innerHTML = '';
+            g.sub.forEach(function (s, i) {
+                var li = document.createElement('li');
+                li.innerHTML = '<span class="no' + (i < 3 ? ' hot' : '') + '">' + (i + 1) + '</span>' +
+                               '<span class="txt">' + s + '</span>';
+                subList.appendChild(li);
+            });
+        }
+        switchTab('novel');
+    </script>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<!--
+    功能名称：JavaScript 对象
+    作者：赵婉彤
+    建立时间：2026-10-29
+    使用大模型：GLM-5.3-Flash
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>16-2 · JavaScript 对象</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #10151f;
+            --line: #303d52;
+            --text: #edf3fc;
+            --muted: #96a5bb;
+            --accent: #69d2c3;
+            --orange: #ffb86b;
+            --purple: #c39bff;
+            --red: #ff7a90;
+        }
+        * { box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 28px 20px 48px;
+            color: var(--text);
+            background: radial-gradient(ellipse at 12% 0%, rgba(255, 184, 107, .1), transparent 40%), var(--bg);
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+        }
+        .page { width: min(1080px, 100%); margin: 0 auto; }
+        .eyebrow { margin: 0 0 10px; color: var(--orange); font-size: 12px; font-weight: 700; letter-spacing: .16em; }
+        h1 { margin: 0; font-size: clamp(26px, 6vw, 42px); }
+        .intro { max-width: 660px; margin: 12px 0 28px; color: var(--muted); line-height: 1.8; }
+        .panel {
+            padding: clamp(20px, 5vw, 32px);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: linear-gradient(145deg, rgba(34, 47, 66, .95), rgba(25, 34, 49, .92));
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .22);
+            margin-bottom: 22px;
+        }
+        h2.sec { margin: 0 0 6px; font-size: 20px; }
+        .sec-desc { margin: 0 0 18px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+
+        /* ===== 对象操作台 ===== */
+        .props { display: flex; flex-wrap: wrap; gap: 10px; min-height: 96px; align-items: flex-end; margin-bottom: 8px; }
+        .prop { text-align: center; }
+        .prop .val {
+            min-width: 96px; padding: 14px 14px;
+            border: 1px solid rgba(255, 184, 107, .45); border-radius: 10px;
+            background: rgba(255, 184, 107, .09);
+            font: 700 17px/1.3 "Microsoft YaHei", sans-serif;
+            animation: pop .35s ease;
+        }
+        .prop .key { margin-top: 6px; color: var(--muted); font: 11px/1 "Consolas", monospace; }
+        .prop.new .val { border-color: var(--accent); background: rgba(105, 210, 195, .15); color: var(--accent); }
+        .prop.empty { color: var(--muted); font-size: 13px; padding-bottom: 40px; }
+        @keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .ctrl { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
+        .ctrl input {
+            width: 110px; padding: 9px 10px;
+            border: 1px solid var(--line); border-radius: 8px;
+            background: rgba(9, 13, 20, .8); color: var(--text);
+            font: 14px "Consolas", monospace; text-align: center;
+        }
+        .ctrl input:focus { outline: 1px solid var(--orange); }
+        .btn {
+            padding: 9px 14px; cursor: pointer;
+            border: 1px solid var(--line); border-radius: 8px;
+            background: rgba(255, 255, 255, .06); color: var(--text);
+            font: 13px "Microsoft YaHei", sans-serif;
+            transition: border-color .15s, background .15s;
+        }
+        .btn:hover { border-color: var(--orange); background: rgba(255, 184, 107, .14); }
+        .btn code { font: 12px "Consolas", monospace; color: var(--accent); }
+
+        .ops { margin-top: 16px; padding: 12px 16px; border-left: 3px solid var(--orange); border-radius: 0 8px 8px 0; background: rgba(255, 184, 107, .07); }
+        .ops .line { color: #d7e5f5; font: 13px/1.9 "Consolas", monospace; }
+        .ops .line b { color: var(--orange); font-weight: 700; }
+
+        /* ===== 卡片 ===== */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+        .card { padding: 18px; border: 1px solid rgba(150, 165, 187, .2); border-radius: 14px; background: rgba(255, 255, 255, .035); }
+        .card h3 { margin: 0 0 12px; font-size: 16px; }
+        .card h3 code { color: var(--accent); font-size: 15px; }
+        .code-box {
+            margin: 0 0 12px; padding: 12px 14px;
+            border: 1px solid rgba(150, 165, 187, .16); border-radius: 10px;
+            background: rgba(9, 13, 20, .8); color: #cfe0f2;
+            font: 12px/1.7 "Consolas", monospace; white-space: pre-wrap;
+        }
+        .out { padding: 10px 14px; border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; background: rgba(105, 210, 195, .08); }
+        .out .line { color: #d7e5f5; font: 13px/1.9 "Consolas", monospace; }
+
+        /* 嵌套盒子 */
+        .nested { border: 1px dashed rgba(150, 165, 187, .35); border-radius: 8px; padding: 8px 10px; margin: 4px 0; font-size: 13px; }
+        .nested .tag { color: var(--muted); font-size: 11px; font-family: "Consolas", monospace; }
+        .nested .inner { border: 1px dashed rgba(255, 184, 107, .4); border-radius: 8px; padding: 8px 10px; margin-top: 6px; }
+        .nested .leaf { color: var(--accent); font: 13px/1.8 "Consolas", monospace; }
+
+        /* 成绩条 */
+        .bar-row { display: flex; align-items: center; gap: 8px; margin: 7px 0; }
+        .bar-row .who { width: 44px; color: #d7e5f5; font-size: 13px; }
+        .bar-track { flex: 1; height: 14px; border-radius: 7px; background: rgba(255, 255, 255, .07); overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 7px; background: linear-gradient(90deg, #69d2c3, #c39bff); }
+        .bar-row.top .bar-fill { background: linear-gradient(90deg, #ffb86b, #ff7a90); }
+        .bar-row .sc { width: 30px; text-align: right; color: var(--muted); font: 13px "Consolas", monospace; }
+        .bar-row.top .sc { color: var(--orange); font-weight: 700; }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <p class="eyebrow">16-2 / OBJECT</p>
+        <h1>JavaScript 对象</h1>
+        <p class="intro">对象是一组“键值对”的集合——像一张登记表：属性名是栏目，属性值是填写的内容。下面的操作台用一个学生对象来真实地增、删、改、查。</p>
+
+        <!-- 交互操作台 -->
+        <section class="panel" aria-label="对象操作台">
+            <h2 class="sec">交互操作台 · 对象的增删改查</h2>
+            <p class="sec-desc">填属性名和值（可留空，有默认值），点按钮操作这个对象。绿色卡片是刚新增或修改的属性。</p>
+            <div class="props" id="props"></div>
+            <div class="ctrl">
+                <input type="text" id="key" placeholder="属性名" value="hobby">
+                <input type="text" id="val" placeholder="属性值" value="摄影">
+                <button class="btn" data-op="read"><code>obj.key</code> 读取</button>
+                <button class="btn" data-op="set"><code>obj.key = v</code> 新增/修改</button>
+                <button class="btn" data-op="del"><code>delete</code> 删除</button>
+                <button class="btn" data-op="in"><code>'k' in obj</code> 检查</button>
+                <button class="btn" data-op="keys"><code>Object.keys</code> 列出所有键</button>
+                <button class="btn" data-op="forin"><code>for...in</code> 遍历</button>
+            </div>
+            <div class="ops" id="ops"></div>
+        </section>
+
+        <!-- 知识卡片 -->
+        <section class="grid" id="grid" aria-label="知识卡片"></section>
+    </main>
+
+    <script>
+        // ================= 交互操作台 =================
+        var stu = { name: '赵婉彤', age: 20, major: '网页设计' };
+        var ops = [];
+        var propsBox = document.getElementById('props');
+        var opsBox = document.getElementById('ops');
+
+        function getKey(def) {
+            var k = document.getElementById('key').value.trim();
+            return k === '' ? def : k;
+        }
+        function getVal(def) {
+            var v = document.getElementById('val').value.trim();
+            return v === '' ? def : v;
+        }
+        function record(label, ret, mark) {
+            ops.unshift({ label: label, ret: ret, mark: mark });
+            if (ops.length > 6) ops.pop();
+            renderOps();
+            renderProps(mark);
+        }
+        function renderProps(mark) {
+            propsBox.innerHTML = '';
+            var keys = Object.keys(stu);
+            if (keys.length === 0) {
+                propsBox.innerHTML = '<div class="prop empty">对象空了～ 用“新增/修改”加点属性吧</div>';
+                return;
+            }
+            keys.forEach(function (k) {
+                var d = document.createElement('div');
+                d.className = 'prop' + (k === mark ? ' new' : '');
+                d.innerHTML = '<div class="val">' + stu[k] + '</div><div class="key">' + k + '</div>';
+                propsBox.appendChild(d);
+            });
+        }
+        function renderOps() {
+            opsBox.innerHTML = '';
+            ops.forEach(function (o) {
+                var l = document.createElement('div');
+                l.className = 'line';
+                l.innerHTML = '<b>' + o.label + '</b> → ' + o.ret;
+                opsBox.appendChild(l);
+            });
+            if (ops.length === 0) opsBox.innerHTML = '<div class="line" style="color:#96a5bb">还没有操作，点上面任意按钮试试</div>';
+        }
+        renderProps();
+        renderOps();
+
+        document.querySelectorAll('.btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var op = btn.dataset.op, k, v, r;
+                if (op === 'read') {
+                    k = getKey('name');
+                    r = stu[k];
+                    record('stu.' + k, r === undefined ? '<span style="color:#ff7a90">undefined（没有这个属性）</span>' : '<b>' + r + '</b>', undefined);
+                }
+                if (op === 'set') {
+                    k = getKey('hobby'); v = getVal('摄影');
+                    r = stu.hasOwnProperty(k);
+                    stu[k] = v;
+                    record('stu.' + k + ' = "' + v + '"', r ? '修改了已有属性' : '新增了一个属性', k);
+                }
+                if (op === 'del') {
+                    k = getKey('age');
+                    r = stu.hasOwnProperty(k);
+                    delete stu[k];
+                    record('delete stu.' + k, r ? '属性已删除' : '本来就不存在', undefined);
+                }
+                if (op === 'in') {
+                    k = getKey('age');
+                    r = k in stu;
+                    record('"' + k + '" in stu', r ? '<b style="color:#69d2c3">true</b>（存在）' : '<b style="color:#ff7a90">false</b>（不存在）', undefined);
+                }
+                if (op === 'keys') {
+                    r = Object.keys(stu);
+                    record('Object.keys(stu)', '["' + r.join('", "') + '"]', undefined);
+                }
+                if (op === 'forin') {
+                    var lines = [];
+                    for (var key in stu) { lines.push(key + ': ' + stu[key]); }
+                    record('for (var key in stu)', lines.join('　|　'), undefined);
+                }
+            });
+        });
+
+        // ================= 知识卡片 =================
+        var grid = document.getElementById('grid');
+
+        function makeCard(title, code, build) {
+            var card = document.createElement('article');
+            card.className = 'card';
+            card.innerHTML = '<h3><code>' + title + '</code></h3>';
+            var pre = document.createElement('pre');
+            pre.className = 'code-box';
+            pre.textContent = code;
+            var out = document.createElement('div');
+            out.className = 'out';
+            build(out);
+            card.appendChild(pre);
+            card.appendChild(out);
+            grid.appendChild(card);
+        }
+        function line(out, html) {
+            var d = document.createElement('div');
+            d.className = 'line';
+            d.innerHTML = html;
+            out.appendChild(d);
+        }
+
+        // ① 创建对象的三种方式
+        makeCard('创建对象的三种方式',
+            "// ① 字面量（最常用）\nvar s1 = { name: '赵婉彤', age: 20 };\n\n// ② new Object()\nvar s2 = new Object();\ns2.name = '张三';\n\n// ③ 构造函数（批量生产）\nfunction Student(name, age) {\n    this.name = name;\n    this.age = age;\n}\nvar s3 = new Student('李四', 21);",
+            function (out) {
+                line(out, 's1.name → <b style="color:#69d2c3">赵婉彤</b>');
+                line(out, 's3.age → <b style="color:#69d2c3">21</b>');
+            });
+
+        // ② 点语法与方括号
+        makeCard('点语法 vs 方括号',
+            "var stu = { name: '赵婉彤', age: 20 };\n\nstu.name;        // 点语法\nstu['name'];     // 方括号\n\nvar key = 'age';\nstu[key];        // 用变量取值只能方括号",
+            function (out) {
+                line(out, 'stu.name → 赵婉彤');
+                line(out, 'stu[key] → <b style="color:#69d2c3">20</b>');
+                line(out, '<span style="color:#96a5bb">键名带空格或存在变量里时，必须用方括号</span>');
+            });
+
+        // ③ 方法与 this
+        makeCard('方法与 this',
+            "var stu = {\n    name: '赵婉彤',\n    sayHi: function () {\n        return '大家好，我是 ' + this.name;\n    }\n};\nstu.sayHi();",
+            function (out) {
+                line(out, 'stu.sayHi() →');
+                line(out, '<b style="color:#ffb86b">"大家好，我是 赵婉彤"</b>');
+                line(out, '<span style="color:#96a5bb">this 指代调用方法的那个对象</span>');
+            });
+
+        // ④ 嵌套对象
+        makeCard('嵌套对象 · 对象套对象',
+            "var stu = {\n    name: '赵婉彤',\n    address: {\n        city: '杭州',\n        zip: '310000'\n    }\n};\nstu.address.city;",
+            function (out) {
+                var n1 = document.createElement('div');
+                n1.className = 'nested';
+                n1.innerHTML = '<span class="tag">stu</span>' +
+                    '<div>name: <b>赵婉彤</b></div>' +
+                    '<div class="inner"><span class="tag">address</span>' +
+                    '<div class="leaf">city: 杭州　zip: 310000</div></div>';
+                out.appendChild(n1);
+                line(out, 'stu.address.city → <b style="color:#69d2c3">杭州</b>');
+            });
+
+        // ⑤ 对象数组（实战最常用）
+        makeCard('对象数组 · 实战最常用',
+            "var stus = [\n    { name: '张三', score: 88 },\n    { name: '李四', score: 92 },\n    { name: '王五', score: 76 }\n];\nvar top = stus[0];\nfor (var i = 1; i < stus.length; i++) {\n    if (stus[i].score > top.score) {\n        top = stus[i];\n    }\n}",
+            function (out) {
+                var stus = [
+                    { name: '张三', score: 88 },
+                    { name: '李四', score: 92 },
+                    { name: '王五', score: 76 }
+                ];
+                var top = stus[0];
+                for (var i = 1; i < stus.length; i++) {
+                    if (stus[i].score > top.score) top = stus[i];
+                }
+                stus.forEach(function (s) {
+                    var r = document.createElement('div');
+                    r.className = 'bar-row' + (s === top ? ' top' : '');
+                    r.innerHTML = '<span class="who">' + s.name + '</span>' +
+                        '<div class="bar-track"><div class="bar-fill" style="width:' + s.score + '%"></div></div>' +
+                        '<span class="sc">' + s.score + '</span>';
+                    out.appendChild(r);
+                });
+                line(out, '最高分 → <b style="color:#ffb86b">李四 92</b>');
+            });
+
+        // ⑥ for...in 遍历
+        makeCard('for...in 遍历对象',
+            "var stu = { name: '赵婉彤', age: 20, major: '网页设计' };\n\nfor (var key in stu) {\n    console.log(key + ' : ' + stu[key]);\n}",
+            function (out) {
+                var stu = { name: '赵婉彤', age: 20, major: '网页设计' };
+                for (var key in stu) {
+                    line(out, key + ' : <b style="color:#69d2c3">' + stu[key] + '</b>');
+                }
+            });
+    </script>
+</body>
+</html>

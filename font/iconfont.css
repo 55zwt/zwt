@@ -31,3 +31,7 @@
 .icon-gengduo:before  { content: "\f141"; }  /* 更多（省略号）→ Undefined */
 .icon-shanchu:before  { content: "\f1f8"; }  /* 删除（垃圾桶）→ Null */
 .icon-gouwuche:before { content: "\f07a"; }  /* 购物车 → Object */
+.icon-shizhong:before { content: "\f017"; }  /* 时钟 → 时间 */
+.icon-yonghu:before   { content: "\f007"; }  /* 用户 → 发帖人 */
+.icon-sousuo:before   { content: "\f002"; }  /* 放大镜 → 浏览量 */
+.icon-pinglun:before  { content: "\f075"; }  /* 气泡 → 评论数 */
